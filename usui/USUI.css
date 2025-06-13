@@ -1,0 +1,81 @@
+/* 
+    UserScript UI
+    -- made by CCN0 -- https://ccn0.net/pages/usui -- https://github.com/ccn0/usui/ --
+    version 0.1beta
+*/
+
+.USUI_popup {
+    z-index: 400;
+    line-height: 24.5px;
+    width: 480px;
+    height: 80vh;
+    border: 1px solid #000000;
+    border-radius: 0 12px 12px 12px;
+    overflow: hidden;
+    position: fixed;
+    top: 60px;
+    left: 80px;
+    background-color: #ffffff;
+    box-shadow: #00000050 2px 2px 15px;
+    font-family: sans-serif;
+}
+
+.USUI_textcolor {
+    color: #000;
+}
+
+.USUI_popuptitlebar {
+    display: flex;
+    border-bottom: 1px solid #000;
+    background-color: #666666;
+    user-select: none;
+}
+
+.USUI_titlebarbutton {
+    height: 24px;
+    padding: 5px;
+    line-height: 0.5rem;
+    border: 2px outset;
+    &:active {
+        border: 2px inset;
+    }
+}
+
+.USUI_popupcontent {
+    color: #000000;
+    max-height: calc(80vh - 26px);
+    height: 100%;
+    overflow: auto;
+    overflow-x: clip;
+}
+
+.USUI_popupitem {
+    width: 100%;
+    border-bottom: 1px solid #aaa;
+    display: flex;
+    background-color: #fcfcfc;
+}
+
+.USUI_titlespan {
+    font-size: 14px;
+    margin: 0 5px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.USUI_button {
+    font-size: 14px;
+    cursor: pointer;
+    font-family: rubik, helvetica, arial, sans-serif;
+    padding: 5px;
+    background-color: #e9e9ed;
+    border: 2px outset #aaa;
+    &:active,
+    .button:has(img:active) {
+        border: 2px inset #aaa;
+        background-color: #aaaaaa;
+    }
+    &[disabled] {
+        text-decoration: solid line-through 2px;
+    }
+}
