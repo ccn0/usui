@@ -4,9 +4,9 @@
 */
 
 const USUI = {
-    version: "0.003beta",
+    version: "0.1beta",
     popups: [],
-    defaultpos: ["0","0"],
+    defaultpos: ["0", "0"],
     closeMenu: function (menuid) {
         USUI.popups.forEach(popup => {if (popup == menuid) {popup.remove()}});
         USUI.popups = USUI.popups.filter(item => item !== menuid);
@@ -15,10 +15,7 @@ const USUI = {
         USUI.popups.forEach(popup => popup.remove());
         USUI.popups = [];
     },
-    createPopup: (params = {
-        stay: false,
-        position: USUI.defaultpos,
-    }) => {
+    createPopup: (params)=>{
         if (USUI.popupOpen) {
             USUI.closeMenu();
         }
@@ -31,8 +28,7 @@ const USUI = {
             popupContainer.style.left = USUI.position[0];
             popupContainer.style.top = USUI.position[1];
         } else {
-            popupContainer.style.left = params.position[0];
-            popupContainer.style.top = params.position[1];
+            USUI.position = USUI.defaultpos;
         };
 
         const popupTitlebar = document.createElement("div");
@@ -127,7 +123,7 @@ const USUI = {
                 popupContainer.style.top = USUI.position[1];
                 initialX = event.touches[0].clientX;
                 initialY = event.touches[0].clientY;
-            };
+            }
         }, { passive: false });
 
         document.addEventListener("mouseup", () => {
@@ -140,7 +136,7 @@ const USUI = {
 
         popupTitlebar.appendChild(Titlespan);
         popupContainer.appendChild(popupTitlebar);
-        USUI.popups.push(popupContainer);
+        USUI.popups.push(popupContainer)
         return popupContainer;
     },
 };
