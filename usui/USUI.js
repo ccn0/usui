@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.002beta",
+    version: "0.003beta",
     popups: [],
     defaultpos: ["0","0"],
     closeMenu: function (menuid) {
@@ -31,7 +31,8 @@ const USUI = {
             popupContainer.style.left = USUI.position[0];
             popupContainer.style.top = USUI.position[1];
         } else {
-            USUI.position = params.position;
+            popupContainer.style.left = params.position[0];
+            popupContainer.style.top = params.position[1];
         };
 
         const popupTitlebar = document.createElement("div");
