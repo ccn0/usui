@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.004beta",
+    version: "0.005beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -31,7 +31,7 @@ const USUI = {
             popupContainer.style.left = USUI.position[0];
             popupContainer.style.top = USUI.position[1];
         } else {
-            USUI.position = params.position;
+            USUI.position = params.position ?? USUI.defaultpos;
             popupContainer.style.left = USUI.position[0];
             popupContainer.style.top = USUI.position[1];
         };
