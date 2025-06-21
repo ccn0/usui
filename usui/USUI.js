@@ -4,9 +4,10 @@
 */
 
 const USUI = {
-    version: "0.003beta",
+    version: "0.004beta",
     popups: [],
-    defaultpos: ["0", "0"],
+    defaultpos: ["0","0"],
+    position: ["0","0"],
     closeMenu: function (menuid) {
         USUI.popups.forEach(popup => {if (popup == menuid) {popup.remove()}});
         USUI.popups = USUI.popups.filter(item => item !== menuid);
@@ -15,12 +16,14 @@ const USUI = {
         USUI.popups.forEach(popup => popup.remove());
         USUI.popups = [];
     },
-    createPopup: (params)=>{
-        if (USUI.popupOpen) {
-            USUI.closeMenu();
-        }
-        USUI.popupOpen = true;
-
+    createPopup: (params = {
+        id: "unknownPopup",
+        stay: false,
+        position: USUI.defaultpos || ["0","0"],
+        buttons: [],
+        title: "Popup",
+        fencing: false,
+    }) => {
         const popupContainer = document.createElement("div");
         popupContainer.classList.add("USUI_popup");
         popupContainer.id = params.id ?? "unknownPopup";
@@ -28,7 +31,7 @@ const USUI = {
             popupContainer.style.left = USUI.position[0];
             popupContainer.style.top = USUI.position[1];
         } else {
-            USUI.position = params?.position ?? USUI.defaultpos;
+            USUI.position = params.position;
             popupContainer.style.left = USUI.position[0];
             popupContainer.style.top = USUI.position[1];
         };
