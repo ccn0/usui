@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.005beta",
+    version: "0.006beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -65,22 +65,26 @@ const USUI = {
         let initialX;
         let initialY;
 
-        popupTitlebar.addEventListener("mousedown", (event) => {
+        popupTitlebar.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             isDragging = true;
-            initialX = event.clientX;
-            initialY = event.clientY;
+            initialX = e.clientX;
+            initialY = e.clientY;
         });
 
-        popupTitlebar.addEventListener("touchstart", (event) => {
+        popupTitlebar.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             isDragging = true;
-            initialX = event.touches[0].clientX;
-            initialY = event.touches[0].clientY;
+            initialX = e.touches[0].clientX;
+            initialY = e.touches[0].clientY;
         });
 
-        document.addEventListener("mousemove", (event) => {
+        document.addEventListener("mousemove", (e) => {
             if (isDragging) {
-                const dx = event.clientX - initialX;
-                const dy = event.clientY - initialY;
+                const dx = e.clientX - initialX;
+                const dy = e.clientY - initialY;
                 if (params.fencing) {
                     const rect = popupContainer.getBoundingClientRect();
                     let newLeft = popupContainer.offsetLeft + dx;
@@ -99,15 +103,15 @@ const USUI = {
                 }
                 popupContainer.style.left = USUI.position[0];
                 popupContainer.style.top = USUI.position[1];
-                initialX = event.clientX;
-                initialY = event.clientY;
+                initialX = e.clientX;
+                initialY = e.clientY;
             }
         });
 
-        document.addEventListener("touchmove", (event) => {
+        document.addEventListener("touchmove", (e) => {
             if (isDragging) {
-                const dx = event.touches[0].clientX - initialX;
-                const dy = event.touches[0].clientY - initialY;
+                const dx = e.touches[0].clientX - initialX;
+                const dy = e.touches[0].clientY - initialY;
                 if (params.fencing) {
                     const rect = popupContainer.getBoundingClientRect();
                     let newLeft = popupContainer.offsetLeft + dx;
@@ -126,8 +130,8 @@ const USUI = {
                 }
                 popupContainer.style.left = USUI.position[0];
                 popupContainer.style.top = USUI.position[1];
-                initialX = event.touches[0].clientX;
-                initialY = event.touches[0].clientY;
+                initialX = e.touches[0].clientX;
+                initialY = e.touches[0].clientY;
             }
         }, { passive: false });
 
