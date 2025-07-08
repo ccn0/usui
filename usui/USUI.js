@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.006beta",
+    version: "0.007beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -75,7 +75,6 @@ const USUI = {
 
         popupTitlebar.addEventListener("touchstart", (e) => {
             e.preventDefault();
-            e.stopPropagation();
             isDragging = true;
             initialX = e.touches[0].clientX;
             initialY = e.touches[0].clientY;
