@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.008beta",
+    version: "0.009beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -107,8 +107,8 @@ const USUI = {
         });
 
         document.addEventListener("touchmove", (e) => {
-            e.preventDefault();
             if (isDragging) {
+                e.preventDefault();
                 const dx = e.touches[0].clientX - initialX;
                 const dy = e.touches[0].clientY - initialY;
                 if (params.fencing) {
