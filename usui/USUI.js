@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.007beta",
+    version: "0.008beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -74,7 +74,6 @@ const USUI = {
         });
 
         popupTitlebar.addEventListener("touchstart", (e) => {
-            e.preventDefault();
             isDragging = true;
             initialX = e.touches[0].clientX;
             initialY = e.touches[0].clientY;
@@ -108,6 +107,7 @@ const USUI = {
         });
 
         document.addEventListener("touchmove", (e) => {
+            e.preventDefault();
             if (isDragging) {
                 const dx = e.touches[0].clientX - initialX;
                 const dy = e.touches[0].clientY - initialY;

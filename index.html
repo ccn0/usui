@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <script>
-        location.href = "https://ccn0.net/pages/usui/"
+        (()=>{
+            if (location.hostname == "127.0.0.1") return;
+            location.href = "https://ccn0.net/pages/usui/";
+        })()
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
