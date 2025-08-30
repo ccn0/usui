@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.010beta",
+    version: "0.011beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -241,7 +241,7 @@ const USUI = {
                     sliderR.value = values[0];
                     sliderG.value = values[1];
                     sliderB.value = values[2];
-                    updateColor();
+                    updateColor({dontupdate:["hexinput"]});
                 });
                 hexInput.addEventListener("change",(e)=>{
                     if (e.target.value.match(/[^0-9a-fA-F#]/g)) return;
@@ -249,14 +249,14 @@ const USUI = {
                     sliderR.value = values[0];
                     sliderG.value = values[1];
                     sliderB.value = values[2];
-                    updateColor();
+                    updateColor({dontupdate:["hexinput"]});
                 });
                 prompt.appendChild(hexInput);
-                function updateColor() {
+                function updateColor(params = {dontupdate:[]}) {
                     const hex = computeHex();
                     colorChip.style.backgroundColor = hex;
                     colorInput.dataset.value = hex;
-                    hexInput.value = hex;
+                    if (!params.dontupdate.includes("hexinput")) hexInput.value = hex;
 
                     const event = new Event("input", { bubbles: true });
                     colorInput.dispatchEvent(event);
