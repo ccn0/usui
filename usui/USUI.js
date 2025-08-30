@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.011beta",
+    version: "0.012beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -203,8 +203,12 @@ const USUI = {
                 const prompt = document.createElement("div");
                 prompt.classList.add("USUI_M_prompt");
                 prompt.style.cssText = `top:${e.clientY}px;left:${e.clientX}px;`;
+                prompt.style.backgroundColor = computeHex();
+                prompt.style.borderColor = computeHex();
 
                 const hexInput = document.createElement("input");
+                hexInput.classList.add("USUI_M_colorInput_iText")
+                hexInput.type = "text";
                 hexInput.title = "Insert Hex Color Code";
                 hexInput.value = params.value || computeHex();
                 hexInput.placeholder = "#abcdef";
@@ -214,11 +218,11 @@ const USUI = {
                 }) {
                     const slider = document.createElement("input");
                     slider.title = params.title;
-                    slider.classList.add("styled-slider","slider-progress");
                     slider.type = "range";
                     slider.min = "0";
                     slider.max = "255";
                     slider.value = values[index];
+                    slider.classList.add("USUI_M_colorInput_slider", `USUI_M_colorInput_slider${index}`);
                     slider.addEventListener("input",(e)=>{
                         values[index] = Number(e.target.value);
                         updateColor();
@@ -235,6 +239,7 @@ const USUI = {
                 const sliderR = createSlider(0, {title: "Red"});
                 const sliderG = createSlider(1, {title: "Green"});
                 const sliderB = createSlider(2, {title: "Blue"});
+
                 hexInput.addEventListener("input",(e)=>{
                     if (e.target.value.match(/[^0-9a-fA-F#]/g)) return;
                     defValues(e.target.value);
@@ -257,6 +262,8 @@ const USUI = {
                     colorChip.style.backgroundColor = hex;
                     colorInput.dataset.value = hex;
                     if (!params.dontupdate.includes("hexinput")) hexInput.value = hex;
+                    prompt.style.backgroundColor = computeHex();
+                    prompt.style.borderColor = computeHex();
 
                     const event = new Event("input", { bubbles: true });
                     colorInput.dispatchEvent(event);

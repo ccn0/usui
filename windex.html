@@ -128,7 +128,7 @@
 
         row1.appendChild(document.createTextNode("Color Input: "));
 
-        const exampleRGB = USUI.modules.iRGB({red:100,green:255,blue:0});
+        const exampleRGB = USUI.modules.iRGB({value:"#e64695"});
         exampleRGB.addEventListener('input',(e)=>{
             console.log(e.target.dataset.value);
         });
