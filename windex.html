@@ -29,9 +29,14 @@
                     textContent: "X",
                     title: "Close",
                     event: () => {
-                        alert("Should run USUI.closeMenu(popup);")
+                        USUIalert("Should run <code>USUI.closeMenu(popup);</code>, but you <em>can</em> close this popup!", {usehtml: true, titletext: "Closeable"})
                     },
                 },
+                {
+                    textContent: "Modules",
+                    title: "View USUI's built in modules",
+                    event: moduleTest
+                }
             ],
         });
         oiContainer.style.height = "auto";
@@ -57,20 +62,85 @@
         };
         errContent.appendChild(iframe);
 
-        oiContainer.addEventListener("keydown", (e) => {
-            if (e.key == "Escape") {
-                e.preventDefault();
-                USUI.closeMenu(oiContainer);
-            }
-            if (e.key == "Enter") {
-                e.preventDefault();
-                USUI.closeMenu(oiContainer);
-            }
-        });
-
         oiContainer.appendChild(errContent);
         document.body.appendChild(oiContainer);
     }
+    
+    function USUIalert(message = "",params = {
+        titletext: "Alert",
+        usehtml: false,
+    }) {
+        const alertContainer = USUI.createPopup({
+            stay: false, 
+            position: ["6%","6%"],
+            id: "alertmenu",
+            title: params.titletext,
+            buttons: [
+                {
+                textContent: "X",
+                title: "Close"+(params.titletext.length > 0 ? " "+params.titletext+" Window": ""),
+                classes: ["closebtn"],
+                event: () => {
+                    USUI.closeMenu(alertContainer);}
+                },
+            ]
+        });
+        alertContainer.style.height = "auto";
+
+        const alertContent = document.createElement('div');
+        alertContent.classList.add("USUI_popupcontent", "USUI_textcolor");
+        alertContent.style.cssText = "padding: 5px 15px;display: block;flex-direction: column;";
+        if (params.usehtml) {
+            alertContent.innerHTML = message;
+        } else {
+            alertContent.textContent = message;
+        };
+
+        alertContainer.appendChild(alertContent);
+        document.body.appendChild(alertContainer);
+
+        alertContainer.querySelector("button").focus();
+    };
+    
+    function moduleTest() {
+        const alertContainer = USUI.createPopup({
+            stay: false, 
+            position: ["6%","6%"],
+            id: "modeultest",
+            title: "USUI Modules",
+            buttons: [
+                {
+                textContent: "X",
+                title: "Close Modules Window",
+                classes: ["closebtn"],
+                event: () => {
+                    USUI.closeMenu(alertContainer);}
+                },
+            ]
+        });
+        alertContainer.style.height = "auto";
+
+        const alertContent = document.createElement('div');
+        alertContent.classList.add("USUI_popupcontent", "USUI_textcolor");
+        alertContent.style.cssText = "padding: 15px;display: block;flex-direction: column;";
+
+        const row1 = document.createElement("div");
+
+        row1.appendChild(document.createTextNode("Color Input: "));
+
+        const exampleRGB = USUI.modules.iRGB({red:100,green:255,blue:0});
+        exampleRGB.addEventListener('input',(e)=>{
+            console.log(e.target.dataset.value);
+        });
+        row1.appendChild(exampleRGB);
+
+        alertContent.appendChild(row1);
+
+        alertContainer.appendChild(alertContent);
+        document.body.appendChild(alertContainer);
+
+        alertContainer.querySelector("button").focus();
+    };
     </script>
 </body>
 </html>
