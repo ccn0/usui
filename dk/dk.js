@@ -20,7 +20,7 @@ class DK_Key {
 }
 
 const DK = {
-    version: "0D01",
+    version: "0D02",
     keyboards: {
         qwerty: [
             [
@@ -62,6 +62,8 @@ const DK = {
     },
     load: (keyboard, params = {
         bottom: "20%",
+        keyHeight: "64px",
+        keyFontSize: "200%",
     })=>{
         (()=>{
             if (document.querySelector('link[rel="stylesheet"][href$="dk.css"]')) return;
@@ -89,6 +91,8 @@ const DK = {
         function createKey(k) {
             const key = document.createElement("div");
             key.classList.add("DK_key");
+            key.style.height = params.keyHeight;
+            key.style.fontSize = params.keyFontSize;
             key.textContent = k.display;
             if (k.display != k.key) {
                 key.dataset.truedisplay = "1";
@@ -111,7 +115,6 @@ const DK = {
                     }));
                 }, 100);
             });
-
             key.addEventListener("mouseup", () => {
                 clearInterval(holdInterval);
                 document.dispatchEvent(new KeyboardEvent("keyup", {
@@ -120,7 +123,6 @@ const DK = {
                     bubbles: true,
                 }));
             });
-
             key.addEventListener("mouseleave", () => {
                 clearInterval(holdInterval);
                 document.dispatchEvent(new KeyboardEvent("keyup", {
