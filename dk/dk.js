@@ -58,6 +58,22 @@ const DK = {
             [
                 new DK_Key({key:" ",display:"Space"})
             ]
+        ],
+        gdcR: [
+            [
+                new DK_Key({key:"1"}),
+                new DK_Key({key:"2"}),
+                new DK_Key({key:"w"}),
+                new DK_Key({key:"r",display:"START"}),
+                new DK_Key({key:"Enter",display:"BACK"}),
+            ],
+            [
+                new DK_Key({key:"c",display:"BUILD"}),
+                new DK_Key({key:"a"}),
+                new DK_Key({key:"s"}),
+                new DK_Key({key:"d"}),
+                new DK_Key({key:" ",display:"SHOOT"}),
+            ],
         ]
     },
     load: (keyboard, params = {
