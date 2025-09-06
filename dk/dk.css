@@ -1,0 +1,33 @@
+.DK_container {
+    position: fixed;
+    bottom: 20%;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.DK_row {
+    background: #fff;
+    color: #000;
+    display: flex;
+    .DK_key {
+        flex: 1;
+        height: 64px;
+        border-radius: 0;
+        border: 8px outset #000;
+        text-align: center;
+        font-weight: bold;
+        font-size: 200%;
+        font-family: sans-serif;
+        align-content: center;
+        user-select: none;
+        &:not([data-truedisplay="1"]) {
+            text-transform: uppercase;
+        }
+        &:active {
+            border-style: inset;
+        }
+    }
+}
