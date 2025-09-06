@@ -17,7 +17,7 @@ class DK_Key {
         this.metaKey = params.metaKey || false;
         this.disabled = params.disabled || false;
     }
-}
+};
 
 const DK = {
     version: "0D03",
@@ -149,6 +149,7 @@ const DK = {
             });
             key.addEventListener("touchstart", (e) => {
                 e.preventDefault();
+                key.classList.add("DK_key_active");
                 document.dispatchEvent(new KeyboardEvent("keydown", {
                     key: k.key,
                     code: k.key,
@@ -165,6 +166,7 @@ const DK = {
             });
             key.addEventListener("touchend", () => {
                 clearInterval(holdInterval);
+                key.classList.remove("DK_key_active");
                 document.dispatchEvent(new KeyboardEvent("keyup", {
                     key: k.key,
                     code: k.key,
@@ -173,6 +175,7 @@ const DK = {
             });
             key.addEventListener("touchcancel", () => {
                 clearInterval(holdInterval);
+                key.classList.remove("DK_key_active");
                 document.dispatchEvent(new KeyboardEvent("keyup", {
                     key: k.key,
                     code: k.key,

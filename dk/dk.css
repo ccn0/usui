@@ -26,7 +26,7 @@
         &:not([data-truedisplay="1"]) {
             text-transform: uppercase;
         }
-        &:active {
+        &:active,&.DK_key_active {
             border-style: inset;
         }
     }
