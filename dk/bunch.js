@@ -9,6 +9,6 @@
     document.head.appendChild(usuicss);
 
     dkjs.onload = ()=>{
-        DK.load(DK.keyboards.gdcR, {bottom:"0"})
+        DK.load(DK.keyboards.gdcR, {bottom:"0",keyFontSize:"150%"})
     };
 })();

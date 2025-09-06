@@ -20,7 +20,7 @@ class DK_Key {
 }
 
 const DK = {
-    version: "0D02",
+    version: "0D03",
     keyboards: {
         qwerty: [
             [
@@ -140,6 +140,38 @@ const DK = {
                 }));
             });
             key.addEventListener("mouseleave", () => {
+                clearInterval(holdInterval);
+                document.dispatchEvent(new KeyboardEvent("keyup", {
+                    key: k.key,
+                    code: k.key,
+                    bubbles: true,
+                }));
+            });
+            key.addEventListener("touchstart", (e) => {
+                e.preventDefault();
+                document.dispatchEvent(new KeyboardEvent("keydown", {
+                    key: k.key,
+                    code: k.key,
+                    bubbles: true,
+                }));
+
+                holdInterval = setInterval(() => {
+                    document.dispatchEvent(new KeyboardEvent("keydown", {
+                        key: k.key,
+                        code: k.key,
+                        bubbles: true,
+                    }));
+                }, 100);
+            });
+            key.addEventListener("touchend", () => {
+                clearInterval(holdInterval);
+                document.dispatchEvent(new KeyboardEvent("keyup", {
+                    key: k.key,
+                    code: k.key,
+                    bubbles: true,
+                }));
+            });
+            key.addEventListener("touchcancel", () => {
                 clearInterval(holdInterval);
                 document.dispatchEvent(new KeyboardEvent("keyup", {
                     key: k.key,
