@@ -39,7 +39,7 @@ class DK_Keyboard {
 };
 
 const DK = {
-    version: "0D04",
+    version: "0D05",
     keyboards: {},
     load: (keyboard, params = {
         bottom: "20%",
@@ -79,87 +79,61 @@ const DK = {
             key.style.cssText += keyboard.keycss || "";
             key.style.cssText += k.css || "";
             key.textContent = k.display;
-            if (k.display != k.key) {
-                key.dataset.truedisplay = "1";
-            };
+            if (k.display != k.key) key.dataset.truedisplay = "1";
             if (k.blank) {
                 key.classList.add("DK_key_blank");
                 return key;
             }
 
-            let holdInterval;
+            const holdIntervals = {};
 
-            key.addEventListener("mousedown", () => {
-                let rate = k.holdRate || 100;
+            function startHold(id) {
+                const rate = k.holdRate || 100;
                 document.dispatchEvent(new KeyboardEvent("keydown", {
                     key: k.key,
                     code: k.key,
                     bubbles: true,
                 }));
-
-                holdInterval = setInterval(() => {
+                holdIntervals[id] = setInterval(() => {
                     document.dispatchEvent(new KeyboardEvent("keydown", {
                         key: k.key,
                         code: k.key,
                         bubbles: true,
                     }));
                 }, rate);
-            });
-            key.addEventListener("mouseup", () => {
-                clearInterval(holdInterval);
+            };
+
+            function stopHold(id) {
+                clearInterval(holdIntervals[id]);
+                delete holdIntervals[id];
                 document.dispatchEvent(new KeyboardEvent("keyup", {
                     key: k.key,
                     code: k.key,
                     bubbles: true,
                 }));
-            });
-            key.addEventListener("mouseleave", () => {
-                clearInterval(holdInterval);
-                document.dispatchEvent(new KeyboardEvent("keyup", {
-                    key: k.key,
-                    code: k.key,
-                    bubbles: true,
-                }));
-            });
+            }
+
+            key.addEventListener("mousedown", () => startHold("mouse"));
+            key.addEventListener("mouseup", () => stopHold("mouse"));
+            key.addEventListener("mouseleave", () => stopHold("mouse"));
+
             key.addEventListener("touchstart", (e) => {
                 e.preventDefault();
                 key.classList.add("DK_key_active");
-                let rate = k.holdRate || 100;
-                document.dispatchEvent(new KeyboardEvent("keydown", {
-                    key: k.key,
-                    code: k.key,
-                    bubbles: true,
-                }));
+                for (let touch of e.changedTouches) startHold(touch.identifier);
+            });
 
-                holdInterval = setInterval(() => {
-                    document.dispatchEvent(new KeyboardEvent("keydown", {
-                        key: k.key,
-                        code: k.key,
-                        bubbles: true,
-                    }));
-                }, rate);
-            });
-            key.addEventListener("touchend", () => {
-                clearInterval(holdInterval);
+            key.addEventListener("touchend", (e) => {
                 key.classList.remove("DK_key_active");
-                document.dispatchEvent(new KeyboardEvent("keyup", {
-                    key: k.key,
-                    code: k.key,
-                    bubbles: true,
-                }));
+                for (let touch of e.changedTouches) stopHold(touch.identifier);
             });
-            key.addEventListener("touchcancel", () => {
-                clearInterval(holdInterval);
+
+            key.addEventListener("touchcancel", (e) => {
                 key.classList.remove("DK_key_active");
-                document.dispatchEvent(new KeyboardEvent("keyup", {
-                    key: k.key,
-                    code: k.key,
-                    bubbles: true,
-                }));
+                for (let touch of e.changedTouches) stopHold(touch.identifier);
             });
-            key.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-            });
+
+            key.addEventListener("contextmenu", (e) => e.preventDefault());
 
             return key;
         };
