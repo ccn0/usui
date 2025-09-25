@@ -167,7 +167,7 @@ const USUI = {
             };
             if (params.value) {
                 let temp = params.value?.slice(1).match(/.{1,2}/g) || [params.red, params.green, params.blue];
-                values = [Number("0x"+temp[0]),Number("0x"+temp[1]),Number("0x"+temp[2])]
+                values = [Number("0x"+temp[0]),Number("0x"+temp[1]),Number("0x"+temp[2])];
             } else {
                 values = [params.red, params.green, params.blue];
             };
@@ -290,7 +290,7 @@ const USUI = {
             };
             colorInput.addEventListener("click", (e)=>{colorPrompt(e)});
             colorInput.addEventListener("keydown", (e)=>{
-                if (e.key = "Enter" || e.key == " ") {colorPrompt(e)}
+                if (e.key == "Enter" || e.key == " ") {colorPrompt(e)}
             });
 
             colorInput.appendChild(colorChip);

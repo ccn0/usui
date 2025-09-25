@@ -1,11 +1,21 @@
 .DK_container {
     position: fixed;
     bottom: 20%;
-    left: 0;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+    &[data-spans="wide"] {
+        left: 0;
+    }
+    &[data-spans="left"] {
+        width: 50%;
+        left: 0px;
+    }
+    &[data-spans="right"] {
+        width: 50%;
+        right: 0px;
+    }
 }
 
 .DK_row {
@@ -23,6 +33,10 @@
         font-family: sans-serif;
         align-content: center;
         user-select: none;
+        &.DK_key_blank {
+            opacity: 0;
+            pointer-events: none;
+        }
         &:not([data-truedisplay="1"]) {
             text-transform: uppercase;
         }

@@ -7,8 +7,11 @@ class DK_Key {
     constructor(params = {
         key: "",
         shiftKey: false,
+        blank:false,
+        css: "",
     }) {
         this.key = params.key;
+        this.css = params.css || "";
         this.display = params.display || params.key || "";
         this.img = params.img || undefined;
         this.shiftKey = params.shiftKey || false;
@@ -16,66 +19,28 @@ class DK_Key {
         this.altKey = params.altKey || false;
         this.metaKey = params.metaKey || false;
         this.disabled = params.disabled || false;
+        this.blank = params.blank || false;
+    }
+};
+class DK_Keyboard {
+    constructor(params = {
+        spans: "wide",
+        keycss: "",
+        rowcss: "",
+        css: "",
+        board: [],
+    }) {
+        this.css = params.css || "";
+        this.rowcss = params.rowcss || "";
+        this.keycss = params.keycss || "";
+        this.spans = params.spans || "wide";
+        this.board = params.board;
     }
 };
 
 const DK = {
-    version: "0D03",
-    keyboards: {
-        qwerty: [
-            [
-                new DK_Key({key:"q"}),
-                new DK_Key({key:"w"}),
-                new DK_Key({key:"e"}),
-                new DK_Key({key:"r"}),
-                new DK_Key({key:"t"}),
-                new DK_Key({key:"y"}),
-                new DK_Key({key:"u"}),
-                new DK_Key({key:"i"}),
-                new DK_Key({key:"o"}),
-                new DK_Key({key:"p"})
-            ],
-            [
-                new DK_Key({key:"a"}),
-                new DK_Key({key:"s"}),
-                new DK_Key({key:"d"}),
-                new DK_Key({key:"f"}),
-                new DK_Key({key:"g"}),
-                new DK_Key({key:"h"}),
-                new DK_Key({key:"j"}),
-                new DK_Key({key:"k"}),
-                new DK_Key({key:"l"})
-            ],
-            [
-                new DK_Key({key:"z"}),
-                new DK_Key({key:"x"}),
-                new DK_Key({key:"c"}),
-                new DK_Key({key:"v"}),
-                new DK_Key({key:"b"}),
-                new DK_Key({key:"n"}),
-                new DK_Key({key:"m"})
-            ],
-            [
-                new DK_Key({key:" ",display:"Space"})
-            ]
-        ],
-        gdcR: [
-            [
-                new DK_Key({key:"1"}),
-                new DK_Key({key:"2"}),
-                new DK_Key({key:"w"}),
-                new DK_Key({key:"r",display:"START"}),
-                new DK_Key({key:"Enter",display:"BACK"}),
-            ],
-            [
-                new DK_Key({key:"c",display:"BUILD"}),
-                new DK_Key({key:"a"}),
-                new DK_Key({key:"s"}),
-                new DK_Key({key:"d"}),
-                new DK_Key({key:" ",display:"SHOOT"}),
-            ],
-        ]
-    },
+    version: "0D04",
+    keyboards: {},
     load: (keyboard, params = {
         bottom: "20%",
         keyHeight: "64px",
@@ -85,17 +50,19 @@ const DK = {
             if (document.querySelector('link[rel="stylesheet"][href$="dk.css"]')) return;
             const styles = document.createElement("link");
             styles.rel = "style";
-            // styles.href = "https://ccn0.net/things/dk/dk.css";
-            styles.href = "dk.css";
+            styles.href = "https://usui.qog.app/dk/dk.css";
             document.head.appendChild(styles);
         })();
         const dkcontainer = document.createElement("div");
         dkcontainer.classList.add("DK_container");
         dkcontainer.style.bottom = params.bottom;
+        dkcontainer.style.cssText += keyboard.css || "";
+        dkcontainer.dataset.spans = keyboard.spans;
 
-        keyboard.forEach(row => {
+        keyboard.board.forEach(row => {
             const rowCont = document.createElement("div");
             rowCont.classList.add("DK_row");
+            rowCont.style.cssText += keyboard.rowcss || "";
             row.forEach(k=>{
                 rowCont.appendChild(createKey(k))
             });
@@ -109,14 +76,21 @@ const DK = {
             key.classList.add("DK_key");
             key.style.height = params.keyHeight;
             key.style.fontSize = params.keyFontSize;
+            key.style.cssText += keyboard.keycss || "";
+            key.style.cssText += k.css || "";
             key.textContent = k.display;
             if (k.display != k.key) {
                 key.dataset.truedisplay = "1";
             };
+            if (k.blank) {
+                key.classList.add("DK_key_blank");
+                return key;
+            }
 
             let holdInterval;
 
             key.addEventListener("mousedown", () => {
+                let rate = k.holdRate || 100;
                 document.dispatchEvent(new KeyboardEvent("keydown", {
                     key: k.key,
                     code: k.key,
@@ -129,7 +103,7 @@ const DK = {
                         code: k.key,
                         bubbles: true,
                     }));
-                }, 100);
+                }, rate);
             });
             key.addEventListener("mouseup", () => {
                 clearInterval(holdInterval);
@@ -150,6 +124,7 @@ const DK = {
             key.addEventListener("touchstart", (e) => {
                 e.preventDefault();
                 key.classList.add("DK_key_active");
+                let rate = k.holdRate || 100;
                 document.dispatchEvent(new KeyboardEvent("keydown", {
                     key: k.key,
                     code: k.key,
@@ -162,7 +137,7 @@ const DK = {
                         code: k.key,
                         bubbles: true,
                     }));
-                }, 100);
+                }, rate);
             });
             key.addEventListener("touchend", () => {
                 clearInterval(holdInterval);
@@ -182,8 +157,103 @@ const DK = {
                     bubbles: true,
                 }));
             });
+            key.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
 
             return key;
         };
     }
+};
+function _DK(options) {
+    return new DK_Key(options);
+};
+DK.keyboards["qwerty"] = {
+    spans: "wide",
+    board:[
+        [
+            _DK({key:"q"}),
+            _DK({key:"w"}),
+            _DK({key:"e"}),
+            _DK({key:"r"}),
+            _DK({key:"t"}),
+            _DK({key:"y"}),
+            _DK({key:"u"}),
+            _DK({key:"i"}),
+            _DK({key:"o"}),
+            _DK({key:"p"})
+        ],
+        [
+            _DK({key:"a"}),
+            _DK({key:"s"}),
+            _DK({key:"d"}),
+            _DK({key:"f"}),
+            _DK({key:"g"}),
+            _DK({key:"h"}),
+            _DK({key:"j"}),
+            _DK({key:"k"}),
+            _DK({key:"l"})
+        ],
+        [
+            _DK({key:"z"}),
+            _DK({key:"x"}),
+            _DK({key:"c"}),
+            _DK({key:"v"}),
+            _DK({key:"b"}),
+            _DK({key:"n"}),
+            _DK({key:"m"})
+        ],
+        [
+            _DK({key:" ",display:"Space"})
+        ]
+    ]
+};
+DK.keyboards["gdcR"] = {
+    spans: "wide",
+    board: [
+        [
+            _DK({key:"1"}),
+            _DK({key:"w"}),
+            _DK({key:"2"}),
+            _DK({key:"c",display:"BUILD"}),
+            _DK({key:" ",display:"SHOOT"}),
+        ],
+        [
+            _DK({key:"a"}),
+            _DK({key:"s"}),
+            _DK({key:"d"}),
+            _DK({key:"r",display:"START"}),
+            _DK({key:"Enter",display:"BACK"}),
+        ],
+    ]
+};
+DK.keyboards["dpad"] = {
+    spans: "left",
+    keycss: "font-family:monospace;font-size:300%;",
+    board: [
+        [
+            _DK({blank:true}),
+            _DK({key:"ArrowUp",display:"↑"}),
+            _DK({blank:true}),
+        ],
+        [
+            _DK({key:"ArrowLeft",display:"←"}),
+            _DK({blank:true}),
+            _DK({key:"ArrowRight",display:"→"}),
+        ],
+        [
+            _DK({blank:true}),
+            _DK({key:"ArrowDown",display:"↓"}),
+            _DK({blank:true}),
+        ],
+    ]
+};
+DK.keyboards["face"] = {
+    spans: "right",
+    board: [
+        [
+            _DK({key:"z"}),
+            _DK({key:"x"}),
+        ],
+    ]
 };
