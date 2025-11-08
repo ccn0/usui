@@ -1,7 +1,7 @@
 /* 
     UserScript UI
     -- made by CCN0 -- https://ccn0.net/pages/usui -- https://github.com/ccn0/usui/ --
-    version 0.012beta
+    version 0.014beta
 */
 
 .USUI_popup {
@@ -127,6 +127,9 @@
     display: flex;
     flex-direction: row;
     height: 32px;
+    &:not(:last-child) {
+        margin-bottom: 2px;
+    }
 }
 .USUI_M_bbButtons {
     max-width: 100%;

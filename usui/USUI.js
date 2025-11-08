@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.013beta",
+    version: "0.014beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -337,15 +337,28 @@ const USUI = {
             inputCont.classList.add("USUI_M_bbContainer","USUI_M_bbButtons");
 
             params.buttons.forEach(btn=>{
-                inputCont.appendChild(createBtn(btn.text,btn.title,btn.action));
+                inputCont.appendChild(createBtn(btn));
             });
 
-            function createBtn(text,title,action) {
+            function createBtn(params = {
+                text:"Button",
+                title:"Button",
+                action:()=>{},
+            }) {
                 const button = document.createElement("button");
                 button.classList.add("USUI_button");
-                button.textContent = text || "Button";
-                button.title = title || "Button";
-                button.addEventListener("click",action);
+                button.textContent = params.text || "Button";
+                if (params.id) {
+                    button.id = params.id;
+                };
+                if (params.classes) {
+                    button.classList.add(...params.classes);
+                };
+                button.title = params.title || "Button";
+                button.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    params.action(e);
+                });
                 return button;
             };
 

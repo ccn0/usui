@@ -133,7 +133,11 @@
 
         row1.appendChild(document.createTextNode("Color Input: "));
 
-        const exampleRGB = USUI.modules.iRGB({value:"#e64695"});
+        const exampleRGB = USUI.modules.iRGB({
+            red: 230, 
+            green: 70,
+            blue: 149
+        });
         exampleRGB.addEventListener('input',(e)=>{
             console.log(e.target.dataset.value);
         });
@@ -169,18 +173,16 @@
         alertContent.classList.add("USUI_popupcontent", "USUI_textcolor");
         alertContent.style.cssText = "padding: 15px;display: block;flex-direction: column;";
 
-        const row1 = document.createElement("div");
-
         const [exampleText,eginput] = USUI.modules.BBinput({
             id: "exampleInput",
-            type:"color",
+            type:"text",
             label: "Text Input",
             value:"#ffaa00",
         });
         eginput.addEventListener('change',(e)=>{
             console.log(e.target.value);
         });
-        row1.appendChild(exampleText);
+        alertContent.appendChild(exampleText);
 
         const [exampleBox,egbox] = USUI.modules.BBinput({
             id: "exampleBox",
@@ -191,7 +193,7 @@
         egbox.addEventListener('change',(e)=>{
             console.log(e.target.checked);
         });
-        row1.appendChild(exampleBox);
+        alertContent.appendChild(exampleBox);
 
         const [exampleRange,egrange] = USUI.modules.BBinput({
             id: "exampleRange",
@@ -204,9 +206,9 @@
         egrange.addEventListener('change',(e)=>{
             console.log(e.target.value);
         });
-        row1.appendChild(exampleRange);
+        alertContent.appendChild(exampleRange);
 
-        row1.appendChild(USUI.modules.BBbuttons({
+        alertContent.appendChild(USUI.modules.BBbuttons({
             buttons: [
                 {
                     text:"Alert 1",
@@ -231,13 +233,88 @@
                 },
             ]
         }));
-
-        alertContent.appendChild(row1);
+        alertContent.appendChild(USUI.modules.BBbuttons({
+            buttons: [
+                {
+                    text:"Cancel",
+                    title: "Does nothing",
+                    id:"cancelbtn",
+                    action: ()=>{
+                    },
+                },
+                {
+                    text:"Submit",
+                    title: "Does nothing, the sequel",
+                    classes: ["truactionblah"],
+                    action: ()=>{
+                    },
+                },
+            ]
+        }));
 
         alertContainer.appendChild(alertContent);
         document.body.appendChild(alertContainer);
 
         alertContainer.querySelector("button").focus();
+    };
+
+    function bbTemplate() {
+        const popupContainer = USUI.createPopup({
+            stay: false, 
+            position: ["6%","6%"],
+            id: "bbtest",
+            title: "Building Blocks Template",
+            buttons: [
+                {
+                    textContent: "X",
+                    title: "Close Window",
+                    classes: ["closebtn"],
+                    event: () => {
+                        USUI.closeMenu(popupContainer);
+                    }
+                },
+            ]
+        });
+        popupContainer.style.height = "auto";
+
+        const popupContent = document.createElement('div');
+        popupContent.classList.add("USUI_popupcontent", "USUI_textcolor");
+        popupContent.style.cssText = "padding: 15px;display: block;flex-direction: column;";
+
+        const [exampleText,eginput] = USUI.modules.BBinput({
+            id: "exampleInput",
+            type:"text",
+            label: "Text Input",
+            value:"#ffaa00",
+        });
+        eginput.addEventListener('change',(e)=>{
+            console.log(e.target.value);
+        });
+        popupContent.appendChild(exampleText);
+
+        popupContent.appendChild(USUI.modules.BBbuttons({
+            buttons: [
+                {
+                    text:"Log 2+2",
+                    title: "Log in the Console 2+2",
+                    action: ()=>{
+                        console.log(2+2);
+                    },
+                },
+                {
+                    text:"Close this",
+                    title: "Literally closes this popup",
+                    action: ()=>{
+                        USUI.closeMenu(popupContainer);
+                    },
+                },
+            ]
+        }));
+
+        popupContainer.appendChild(popupContent);
+        document.body.appendChild(popupContainer);
+
+        popupContainer.querySelector("button").focus();
     };
     </script>
 </body>
