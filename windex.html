@@ -34,9 +34,14 @@
                 },
                 {
                     textContent: "Modules",
-                    title: "View USUI's built in modules",
+                    title: "View USUI's built-in input modules",
                     event: moduleTest
-                }
+                },
+                {
+                    textContent: "Building Blocks",
+                    title: "View USUI's built-in UI modules",
+                    event: buildingblocks
+                },
             ],
         });
         oiContainer.style.height = "auto";
@@ -133,6 +138,99 @@
             console.log(e.target.dataset.value);
         });
         row1.appendChild(exampleRGB);
+
+        alertContent.appendChild(row1);
+
+        alertContainer.appendChild(alertContent);
+        document.body.appendChild(alertContainer);
+
+        alertContainer.querySelector("button").focus();
+    };
+
+    function buildingblocks() {
+        const alertContainer = USUI.createPopup({
+            stay: false, 
+            position: ["6%","6%"],
+            id: "bbtest",
+            title: "USUI Building Blocks",
+            buttons: [
+                {
+                textContent: "X",
+                title: "Close Building Blocks Window",
+                classes: ["closebtn"],
+                event: () => {
+                    USUI.closeMenu(alertContainer);}
+                },
+            ]
+        });
+        alertContainer.style.height = "auto";
+
+        const alertContent = document.createElement('div');
+        alertContent.classList.add("USUI_popupcontent", "USUI_textcolor");
+        alertContent.style.cssText = "padding: 15px;display: block;flex-direction: column;";
+
+        const row1 = document.createElement("div");
+
+        const [exampleText,eginput] = USUI.modules.BBinput({
+            id: "exampleInput",
+            type:"color",
+            label: "Text Input",
+            value:"#ffaa00",
+        });
+        eginput.addEventListener('change',(e)=>{
+            console.log(e.target.value);
+        });
+        row1.appendChild(exampleText);
+
+        const [exampleBox,egbox] = USUI.modules.BBinput({
+            id: "exampleBox",
+            type:"checkbox",
+            label: "Checkbox/Toggle",
+            checked: true,
+        });
+        egbox.addEventListener('change',(e)=>{
+            console.log(e.target.checked);
+        });
+        row1.appendChild(exampleBox);
+
+        const [exampleRange,egrange] = USUI.modules.BBinput({
+            id: "exampleRange",
+            type:"range",
+            label: "Range/Slider",
+            value: 10,
+            min:0,
+            max:30,
+        });
+        egrange.addEventListener('change',(e)=>{
+            console.log(e.target.value);
+        });
+        row1.appendChild(exampleRange);
+
+        row1.appendChild(USUI.modules.BBbuttons({
+            buttons: [
+                {
+                    text:"Alert 1",
+                    title: "Alerts 1",
+                    action: ()=>{
+                        alert(1);
+                    },
+                },
+                {
+                    text:"Log 2+2",
+                    title: "Log in the Console 2+2",
+                    action: ()=>{
+                        console.log(2+2);
+                    },
+                },
+                {
+                    text:"Close this",
+                    title: "Literally closes this popup",
+                    action: ()=>{
+                        USUI.closeMenu(alertContainer);
+                    },
+                },
+            ]
+        }));
 
         alertContent.appendChild(row1);
 

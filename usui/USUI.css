@@ -70,6 +70,7 @@
     padding: 5px;
     background-color: #e9e9ed;
     border: 2px outset #aaa;
+    color: #000;
     &:active,
     .button:has(img:active) {
         border: 2px inset #aaa;
@@ -119,4 +120,23 @@
             background-color: #8a8a8a;
         }
     }
+}
+
+.USUI_M_bbContainer {
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 32px;
+}
+.USUI_M_bbButtons {
+    max-width: 100%;
+    gap:2px;
+    button {
+        flex: 1;
+    }
+}
+.USUI_M_bbLabel,
+.USUI_M_bbInput {
+    align-content: center;
+    flex: 1;
 }

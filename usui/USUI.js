@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.012beta",
+    version: "0.013beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -210,7 +210,7 @@ const USUI = {
                 hexInput.classList.add("USUI_M_colorInput_iText")
                 hexInput.type = "text";
                 hexInput.title = "Insert Hex Color Code";
-                hexInput.value = params.value || computeHex();
+                hexInput.value = computeHex();
                 hexInput.placeholder = "#abcdef";
                 hexInput.maxLength = "7";
                 function createSlider(index, params = {
@@ -295,6 +295,61 @@ const USUI = {
 
             colorInput.appendChild(colorChip);
             return colorInput;
-        }
+        },
+        BBinput: (params = {
+            id: "",
+            type: "text",
+            label: "Text Input",
+            checked: undefined,
+            value: undefined,
+        })=>{
+            const inputCont = document.createElement("div");
+            inputCont.classList.add("USUI_M_bbContainer");
+
+            const label = document.createElement("label");
+            label.classList.add("USUI_M_bbLabel");
+            label.htmlFor = params.id;
+            label.textContent = params.label;
+
+            const input = document.createElement("input");
+            input.classList.add("USUI_M_bbInput");
+            input.type = params.type || "text";
+            input.id = params.id;
+            Object.entries(params).forEach(([key,val])=>{
+                if (!["id","type","label"].includes(key)) input[key] = val;
+            });
+
+            inputCont.appendChild(label);
+            inputCont.appendChild(input);
+
+            return [inputCont, input];
+        },
+        BBbuttons: (params = {
+            buttons:[
+                {
+                    text:"Button",
+                    title:"Button",
+                    action:()=>{}
+                }
+            ]
+        })=>{
+            const inputCont = document.createElement("div");
+            inputCont.classList.add("USUI_M_bbContainer","USUI_M_bbButtons");
+
+            params.buttons.forEach(btn=>{
+                inputCont.appendChild(createBtn(btn.text,btn.title,btn.action));
+            });
+
+            function createBtn(text,title,action) {
+                const button = document.createElement("button");
+                button.classList.add("USUI_button");
+                button.textContent = text || "Button";
+                button.title = title || "Button";
+                button.addEventListener("click",action);
+                return button;
+            };
+
+            return inputCont;
+        },
     }
 };
