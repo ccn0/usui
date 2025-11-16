@@ -1,7 +1,7 @@
 /* 
     UserScript UI
     -- made by CCN0 -- https://ccn0.net/pages/usui -- https://github.com/ccn0/usui/ --
-    version 0.014beta
+    version 0.014betaP01
 */
 
 .USUI_popup {
@@ -67,7 +67,8 @@
     font-size: 14px;
     cursor: pointer;
     font-family: rubik, helvetica, arial, sans-serif;
-    padding: 5px;
+    text-align: center;
+    align-content: center;
     background-color: #e9e9ed;
     border: 2px outset #aaa;
     color: #000;
