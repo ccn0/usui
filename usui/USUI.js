@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.014beta",
+    version: "0.015beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -320,7 +320,36 @@ const USUI = {
             });
 
             inputCont.appendChild(label);
-            inputCont.appendChild(input);
+            if (params.type != "range") {
+                inputCont.appendChild(input)
+            };
+
+            if (params.type == "range") {
+                inputCont.classList.add("USUI_M_bbContRange");
+
+                const tickInpCont = document.createElement("div");
+                tickInpCont.classList.add("USUI_M_tickInCont");
+                tickInpCont.appendChild(input);
+                const tickCont = document.createElement("div");
+                tickCont.classList.add("USUI_M_tickCont");
+
+                function createTickMark(text) {
+                    const tick = document.createElement("div");
+                    tick.classList.add("USUI_M_tick");
+                    tick.textContent = text;
+                    return tick;
+                };
+                if ("min" in params && "max" in params) {
+                    tickCont.appendChild(createTickMark(params.min));
+                    tickCont.appendChild(createTickMark(Math.round((Number(params.min)+Number(params.max))/2)));
+                    tickCont.appendChild(createTickMark(params.max));
+
+                    tickInpCont.appendChild(tickCont);
+                    inputCont.appendChild(tickInpCont);
+                } else {
+                    inputCont.appendChild(input);
+                };
+            };
 
             return [inputCont, input];
         },

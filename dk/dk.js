@@ -17,6 +17,7 @@ class DK_Key {
         this.shiftKey = params.shiftKey || false;
         this.ctrlKey = params.ctrlKey || false;
         this.altKey = params.altKey || false;
+        this.repeat = params.repeat || false;
         this.metaKey = params.metaKey || false;
         this.disabled = params.disabled || false;
         this.blank = params.blank || false;
@@ -39,7 +40,7 @@ class DK_Keyboard {
 };
 
 const DK = {
-    version: "0D05",
+    version: "0D06",
     keyboards: {},
     load: (keyboard, params = {
         bottom: "20%",
