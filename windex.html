@@ -200,8 +200,11 @@
             type:"range",
             label: "Range/Slider",
             value: 10,
-            min:1,
-            max:100,
+            min:0,
+            max:10,
+            step:0.1,
+            ticks: 11,
+            round: 1,
         });
         egrange.addEventListener('change',(e)=>{
             console.log(e.target.value);

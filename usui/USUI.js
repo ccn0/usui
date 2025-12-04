@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.015beta",
+    version: "0.016beta",
     popups: [],
     defaultpos: ["0","0"],
     position: ["0","0"],
@@ -15,6 +15,11 @@ const USUI = {
     closeAll: ()=>{
         USUI.popups.forEach(popup => popup.remove());
         USUI.popups = [];
+    },
+    lib: {
+        round: (num, digits) => {
+            return Number(num.toFixed(digits));
+        },
     },
     createPopup: (params = {
         id: "unknownPopup",
@@ -202,7 +207,6 @@ const USUI = {
                 document.querySelectorAll(".USUI_M_prompt").forEach(el=>el.remove());
                 const prompt = document.createElement("div");
                 prompt.classList.add("USUI_M_prompt");
-                prompt.style.cssText = `top:${e.clientY}px;left:${e.clientX}px;`;
                 prompt.style.backgroundColor = computeHex();
                 prompt.style.borderColor = computeHex();
 
@@ -287,6 +291,20 @@ const USUI = {
                         colorInput.focus();
                     };
                 });
+
+                const promptRect = prompt.getBoundingClientRect();
+                let top = e.clientY;
+                let left = e.clientX;
+
+                if (top + promptRect.height > window.innerHeight) {
+                    top = window.innerHeight - promptRect.height;
+                };
+                if (left + promptRect.width > window.innerWidth) {
+                    left = window.innerWidth - promptRect.width;
+                };
+
+                prompt.style.top = `${top}px`;
+                prompt.style.left = `${left}px`;
             };
             colorInput.addEventListener("click", (e)=>{colorPrompt(e)});
             colorInput.addEventListener("keydown", (e)=>{
@@ -302,6 +320,8 @@ const USUI = {
             label: "Text Input",
             checked: undefined,
             value: undefined,
+            round: 0,
+            ticks: 3,
         })=>{
             const inputCont = document.createElement("div");
             inputCont.classList.add("USUI_M_bbContainer");
@@ -316,7 +336,7 @@ const USUI = {
             input.type = params.type || "text";
             input.id = params.id;
             Object.entries(params).forEach(([key,val])=>{
-                if (!["id","type","label"].includes(key)) input[key] = val;
+                if (!["id","type","label","round","ticks"].includes(key)) input[key] = val;
             });
 
             inputCont.appendChild(label);
@@ -328,21 +348,32 @@ const USUI = {
                 inputCont.classList.add("USUI_M_bbContRange");
 
                 const tickInpCont = document.createElement("div");
-                tickInpCont.classList.add("USUI_M_tickInCont");
+                tickInpCont.classList.add("USUI_M_bbTickInCont");
                 tickInpCont.appendChild(input);
                 const tickCont = document.createElement("div");
-                tickCont.classList.add("USUI_M_tickCont");
+                tickCont.classList.add("USUI_M_bbTickCont");
 
                 function createTickMark(text) {
                     const tick = document.createElement("div");
-                    tick.classList.add("USUI_M_tick");
-                    tick.textContent = text;
+                    tick.classList.add("USUI_M_bbTick");
+                    const tickSpan = document.createElement("span");
+                    tickSpan.textContent = text;
+                    tick.appendChild(tickSpan);
                     return tick;
                 };
-                if ("min" in params && "max" in params) {
-                    tickCont.appendChild(createTickMark(params.min));
-                    tickCont.appendChild(createTickMark(Math.round((Number(params.min)+Number(params.max))/2)));
-                    tickCont.appendChild(createTickMark(params.max));
+                function lerp(min,max,n) {
+                    return min+n*(max-min);
+                };
+                if ("min" in params && "max" in params && params.ticks > 0) {
+                    const min = Number(params.min);
+                    const max = Number(params.max);
+                    const total = params.ticks || 3;
+
+                    for (let i = 0; i < total; i++) {
+                        const t = i / (total - 1);
+                        const value = USUI.lib.round(lerp(min, max, t), (params.round ?? 0));
+                        tickCont.appendChild(createTickMark(`${value}`));
+                    };
 
                     tickInpCont.appendChild(tickCont);
                     inputCont.appendChild(tickInpCont);
