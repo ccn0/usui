@@ -1,5 +1,6 @@
-# usui
+# UserScript UI
 
-UserScript UI, make floating popup windows with buttons and titles, with fencing and very extensible.
+[UserScript UI](https://usui.qog.app/), USUI, is a javascript library(?) to make floating
+popups, with many customizable parameters and other stuff idk read the page
 
 Currently in beta, but working on it actively.
