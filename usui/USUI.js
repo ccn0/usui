@@ -1,18 +1,18 @@
 /* 
     UserScript UI
-    -- made by CCN0 -- https://ccn0.net/pages/usui -- https://github.com/ccn0/usui/ --
+    -- made by CCN0 -- https://usui.qog.app/ -- https://github.com/ccn0/usui/ --
 */
 
 const USUI = {
-    version: "0.017beta",
+    version: "0.018beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
     spawnCSS: (params={
         overwrite:false,
-        host:"https://ccn0.net/usui/lib/USUI.css",
+        host:"https://usui.qog.app/lib/USUI.css",
     })=>{
-        const href = params.host || "https://ccn0.net/usui/lib/USUI.css";
+        const href = params.host || "https://usui.qog.app/lib/USUI.css";
         if (params.overwrite || !document.querySelector(`link[href="${href}"]`)) {
             const usuiCSS = document.createElement("link");
             usuiCSS.rel = "stylesheet";
