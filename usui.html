@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UserScript UI by CCN0</title>
-    <link rel="canonical" href="https://ccn0.net/pages/usui/">
+    <title>UserScript UI by CCN0: Inside the Popup</title>
+    <link rel="canonical" href="https://ccn0.net/usui/index.html">
+    <meta name="robots" content="noindex">
     <style>
         body {
             margin:0;
@@ -27,34 +28,79 @@
                 color: #f0f;
             }
         }
+        img[src="logowordmark.png"] {
+            filter: invert(1);
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
     <div class="content">
         <hgroup>
-            <h1><b>U</b>ser<b>S</b>cript <b>UI</b></h1>
+            <h1>
+                <img src="logowordmark.png" alt="UserScript UI wordmark" draggable="false">
+            </h1>
             <div class="linkbar">
-                <a href="https://ccn0.net/pages/usui/">MADE BY CCN0</a>
+                <a href="https://ccn0.net/">MADE BY CCN0</a>
                 <a href="https://github.com/ccn0/usui">Source</a>
-                <a href="https://ccn0.net/pages/usui/usage">Usage</a>
+                <a href="https://ccn0.net/pages/usui/">Docs</a>
             </div>
         </hgroup>
-        <p>
-USUI is a JS library I made to create floating popup windows on the page, originally designed for my userscripts.
-Currently none of my public userscripts make use of this, as currently its in a very very early beta stage of development.
-That's also why none of the links work.
-You shouldn't be able to see this page, and if you do, hello!
-You're quite curious aren't you? Not like you stumbled onto this page.
-You would've had to find this URL! Maybe you know me more than I think.
-        </p>
-        <h2>
-            What is this?
-        </h2>
-        <p>
-This serves as a sort of test page for it's features. There are many parameters you can add to a popup.
-For instance, the <code>fencing</code> parameter makes it so the window can never leave the screen. Try it,
-drag this window off of the screen.
-        </p>
+<p>USUI is a lightweight toolkit designed to make creating menus or configs for Userscripts easier.
+You can create Popups, which are draggable and customizable windows, with many settings to change their behavior.
+USUI also comes with built-in modules to ease development of configuration menus, and have a standard look across browsers and mobile.</p>
+
+<p>USUI is currently in open-beta, so anyone's allowed to use it, just be wary of any sudden changes
+    or stability issues.
+    Report bugs, or request features on <a href="https://github.com/ccn0/usui/issues">GitHub</a>
+</p>
+
+<h2>Modules</h2>
+
+<p>The Color Picker module (<code>iRGB()</code>) creates a psuedo-input element that acts to replace
+    the already existing HTML color inputs (<code>&lt;input type="color"&gt;</code>) built-in to many
+    browsers, as they are all bad in their own ways, including this one actually.
+    Also important to note: you have to use <code>input.dataset.value</code>
+    and not just <code>input.value</code>.
+</p>
+
+<p>Building Blocks (currently only <code>BBinput()</code>, <code>BBbuttons()</code>)
+    are a set of modules designed to make creating forms or configs easier.
+    You can create button groups and input fields very easily with them.
+    Range inputs (sliders, <code>&lt;input type="range"&gt;</code>) have a way to automatically add tick marks to indicate minimums and maximums, as long as they are provided.
+</p>
+
+<h2>Why and What's next</h2>
+
+<p>After creating an entire popup window system like USUI from scratch for just one Userscript,
+    which <span title="only the dark of night">never even saw the light of day</span>,
+    I decided it would be much easier to implement only one little library of utilities,
+    as opposed to creating a new one per Userscript.
+    The main ethos when I was making USUI was that the popups and modules should
+    look very barebones by default, which enables you have the liberty to customize them in any way,
+    where literally anything else makes it look better.</p>
+
+<p>Many more modules are planned to be added in the future, once I finally get around to them.
+    I will probably continue to maintain USUI into the future, in case of impending GM API or other
+    changes in the JavaScript ecosystem.
+    I also fully intend on finding a purpose to this toolkit when creating or updating my existing
+    Userscripts, as this allows a lot of potential ideas to be made faster and easier.
+</p>
+
+<h2>Usage</h2>
+
+<p>You can use USUI by adding <code>@require https://ccn0.net/usui/lib/USUI.js</code> in the Userscript metadata block,
+    and include the CSS using <code>USUI.spawnCSS()</code>, where you can specify the host
+    and if it should overwrite any existing USUI.</p>
+<p>Note: <b>USUI.qog.app links will be taken down very soon to be replaced with CCN0.net links.</b>
+    Discontinue any use of USUI.qog.app links and sources and replace them with the new URLs,
+    <code>https://ccn0.net/usui/lib/USUI.js</code> and <code>https://ccn0.net/usui/lib/USUI.css</code>.
+    Also <code>/usui/usui/</code> is the development branch, I just find this easier to manage than using git and shit.
+</p>
+
+<h2>Credits</h2>
+
+<p>UserScript UI wordmark and icon use Arimo.</p>
     </div>
 </body>
 </html>
