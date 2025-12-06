@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.018beta",
+    version: "0.019beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
@@ -333,6 +333,7 @@ const USUI = {
             id: "",
             type: "text",
             label: "Text Input",
+            labelAttributes: {},
             checked: undefined,
             value: undefined,
             round: 0,
@@ -345,6 +346,9 @@ const USUI = {
             label.classList.add("USUI_M_bbLabel");
             label.htmlFor = params.id;
             label.textContent = params.label;
+            Object.entries((params.labelAttributes ?? {})).forEach(([key,val])=>{
+                label.setAttribute(key,val);
+            });
             if (params.type === "color") {
                 const colorMod = USUI.modules.iRGB({
                     value: params.value || "#000000"
@@ -353,7 +357,7 @@ const USUI = {
                 colorMod.type = params.type || "text";
                 colorMod.id = params.id;
                 Object.entries(params).forEach(([key,val])=>{
-                    if (!["id","type","label"].includes(key)) colorMod[key] = val;
+                    if (!["id","type","label","labelAttributes"].includes(key)) colorMod[key] = val;
                 });
                 inputCont.appendChild(label);
                 inputCont.appendChild(colorMod);
@@ -364,8 +368,8 @@ const USUI = {
             input.classList.add("USUI_M_bbInput");
             input.type = params.type || "text";
             input.id = params.id;
-            Object.entries(params).forEach(([key,val])=>{
-                if (!["id","type","label","round","ticks"].includes(key)) input[key] = val;
+            Object.entries((params ?? {})).forEach(([key,val])=>{
+                if (!["id","type","label","labelAttributes","round","ticks"].includes(key)) input[key] = val;
             });
 
             inputCont.appendChild(label);
@@ -373,7 +377,7 @@ const USUI = {
                 inputCont.appendChild(input)
             };
 
-            if (params.type == "range") {
+            if (params.type === "range") {
                 inputCont.classList.add("USUI_M_bbContRange");
 
                 const tickInpCont = document.createElement("div");

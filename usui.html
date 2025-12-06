@@ -46,7 +46,7 @@
                 <a target="_top" href="https://ccn0.net/pages/usui/">Docs</a>
             </div>
         </hgroup>
-<p>USUI is a lightweight toolkit designed to make creating menus or configs for Userscripts easier.
+<p>USUI is a lightweight JavaScript toolkit designed to make creating menus or configs for Userscripts easier.
 You can create Popups, which are draggable and customizable windows, with many settings to change their behavior.
 USUI also comes with built-in modules to ease development of configuration menus, and have a standard look across browsers and mobile.</p>
 
@@ -91,11 +91,11 @@ USUI also comes with built-in modules to ease development of configuration menus
 
 <p>You can use USUI by adding <code>@require https://ccn0.net/usui/lib/USUI.js</code> in the Userscript metadata block,
     and include the CSS using <code>USUI.spawnCSS()</code>, where you can specify the host
-    and if it should overwrite any existing USUI.</p>
-<p><!--Note: <b>USUI.qog.app links will be taken down very soon to be replaced with CCN0.net links.</b>
-    Discontinue any use of USUI.qog.app links and sources and replace them with the new URLs,
-    <code>https://ccn0.net/usui/lib/USUI.js</code> and <code>https://ccn0.net/usui/lib/USUI.css</code>.
-    Also --><code>/usui/usui/</code> is the development branch, I just find this easier to manage than using git and shit.
+    and if it should overwrite any existing USUI. To refresh the version that's cached, add
+    search parameters to the URL, e.g. <code>@require https://ccn0.net/usui/lib/USUI.js?v=18</code>.
+</p>
+<p><code>/usui/usui/</code> is the development branch, I just find this easier to manage
+    than using git branches and shit.
 </p>
 
 <h2>Credits</h2>
