@@ -1,7 +1,7 @@
 /* 
     UserScript UI
     -- made by CCN0 -- https://usui.qog.app/ -- https://github.com/ccn0/usui/ --
-    version 0.019beta
+    version 0.021beta
 */
 
 .USUI_popup {
@@ -184,6 +184,12 @@
     color: #000;
     font-size: 100%;
     position: relative;
+}
+.USUI_M_bbTick_set {
+    cursor: pointer;
+    &:hover {
+        font-weight: bold;
+    }
 }
 
 .USUI_M_bbTick span {
