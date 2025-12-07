@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.020beta",
+    version: "0.021beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
@@ -396,6 +396,11 @@ const USUI = {
                         tick.classList.add("USUI_M_bbTick_set");
                         tick.addEventListener("click",()=>{
                             input.value = Number(text);
+                            const inputEvent = new Event("input", { bubbles: true });
+                            const changeEvent = new Event("change", { bubbles: true });
+
+                            input.dispatchEvent(inputEvent);
+                            input.dispatchEvent(changeEvent);
                         });
                     };
                     tick.appendChild(tickSpan);
