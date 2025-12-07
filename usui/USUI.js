@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.019beta",
+    version: "0.020beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
@@ -338,6 +338,7 @@ const USUI = {
             value: undefined,
             round: 0,
             ticks: 3,
+            tickSet: false,
         })=>{
             const inputCont = document.createElement("div");
             inputCont.classList.add("USUI_M_bbContainer");
@@ -357,7 +358,7 @@ const USUI = {
                 colorMod.type = params.type || "text";
                 colorMod.id = params.id;
                 Object.entries(params).forEach(([key,val])=>{
-                    if (!["id","type","label","labelAttributes"].includes(key)) colorMod[key] = val;
+                    if (!["id","type","label","labelAttributes","tickSet"].includes(key)) colorMod[key] = val;
                 });
                 inputCont.appendChild(label);
                 inputCont.appendChild(colorMod);
@@ -369,7 +370,7 @@ const USUI = {
             input.type = params.type || "text";
             input.id = params.id;
             Object.entries((params ?? {})).forEach(([key,val])=>{
-                if (!["id","type","label","labelAttributes","round","ticks"].includes(key)) input[key] = val;
+                if (!["id","type","label","labelAttributes","round","ticks","tickSet"].includes(key)) input[key] = val;
             });
 
             inputCont.appendChild(label);
@@ -391,6 +392,12 @@ const USUI = {
                     tick.classList.add("USUI_M_bbTick");
                     const tickSpan = document.createElement("span");
                     tickSpan.textContent = text;
+                    if (params.tickSet) {
+                        tick.classList.add("USUI_M_bbTick_set");
+                        tick.addEventListener("click",()=>{
+                            input.value = Number(text);
+                        });
+                    };
                     tick.appendChild(tickSpan);
                     return tick;
                 };
