@@ -6,6 +6,7 @@
     <title>UserScript UI by CCN0: Inside the Popup</title>
     <link rel="canonical" href="https://ccn0.net/usui/index.html">
     <meta name="robots" content="noindex">
+    <base target="_top">
     <style>
         body {
             margin:0;
@@ -61,14 +62,16 @@ USUI also comes with built-in modules to ease development of configuration menus
     the already existing HTML color inputs (<code>&lt;input type="color"&gt;</code>) built-in to many
     browsers, as they are all bad in their own ways, including this one actually.
     Also important to note: you have to use <code>input.dataset.value</code>
-    and not just <code>input.value</code>.
+    and not just <code>input.value</code>. Yes, the styling is based on Firefox's color inputs.
 </p>
 
-<p>Building Blocks (currently only <code>BBinput()</code>, <code>BBbuttons()</code>)
-    are a set of modules designed to make creating forms or configs easier.
-    You can create button groups and input fields very easily with them.
-    Range inputs (sliders, <code>&lt;input type="range"&gt;</code>) have a way to automatically add tick marks to indicate minimums and maximums, as long as they are provided.
+<p>Building Blocks are a set of modules designed to make creating forms, info boxes, and configs easier.
+    You can create text and graphics, button groups, and input fields very easily with them.
+    Range inputs (sliders, <code>&lt;input type="range"&gt;</code>) have a way to automatically
+    add tick marks to indicate minimums and maximums, as long as they are provided.
 </p>
+
+<p>You can view examples of USUI's modules by clicking the buttons in the titlebar.</p>
 
 <h2>Why and What's next</h2>
 
@@ -89,7 +92,7 @@ USUI also comes with built-in modules to ease development of configuration menus
 
 <h2>Usage</h2>
 
-<p>You can use USUI by adding <code>@require https://ccn0.net/usui/lib/USUI.js</code> in the Userscript metadata block,
+<p>You can use USUI by adding <code>@require https:/ /ccn0.net/usui/lib/USUI.js</code> in the Userscript metadata block,
     and include the CSS using <code>USUI.spawnCSS()</code>, where you can specify the host
     and if it should overwrite any existing USUI. To refresh the version that's cached, add
     search parameters to the URL, e.g. <code>@require https://ccn0.net/usui/lib/USUI.js?v=18</code>.
@@ -100,7 +103,8 @@ USUI also comes with built-in modules to ease development of configuration menus
 
 <h2>Credits</h2>
 
-<p>UserScript UI wordmark and icon use Arimo.</p>
+<p>Made by CCN0</p>
+<p>"UserScript UI" logo, wordmark and icon use the font <a href="https://fonts.google.com/specimen/Arimo">Arimo</a> by Steve Matteson.</p>
     </div>
 </body>
 </html>
