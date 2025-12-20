@@ -1,52 +1,70 @@
 /* 
     UserScript UI
     -- made by CCN0 -- https://usui.qog.app/ -- https://github.com/ccn0/usui/ --
-    version 0.023beta
+    version 0.024beta
 */
 
+.USUI_popup_T_DEFAULT {
+    --bodycolor: #ffffff;
+    --textcolor: #000000;
+    --defaultpopupzindex: 400;
+    --popupshadow: #00000050 2px 2px 15px;
+    --popupborder: 1px solid #000;
+    --popupradius: 0 12px 12px 12px;
+    --titlebarbg: #666666;
+    --titlebarcolor: #ffffff;
+    --btnbgcolor: #e9e9ed;
+    --btnbgcoloractive: #aaaaaa;
+    --btncolor: #000000;
+    --btnborder: 2px outset #aaaaaa;
+    --btnborderactive: 2px inset #aaaaaa;
+    --disabledtext: solid line-through 2px;
+}
+
 .USUI_popup {
-    z-index: 400;
+    display: flex;
+    flex-direction: column;
+    z-index: var(--defaultpopupzindex);
     line-height: 24.5px;
     width: 480px;
     height: 80vh;
-    border: 1px solid #000000;
-    border-radius: 0 12px 12px 12px;
+    border: var(--popupborder);
+    border-radius: var(--popupradius);
     overflow: hidden;
     position: fixed;
     top: 60px;
     left: 80px;
-    background-color: #ffffff;
-    box-shadow: #00000050 2px 2px 15px;
+    background-color: var(--bodycolor);
+    box-shadow: var(--popupshadow);
     font-family: sans-serif;
 }
 
 .USUI_textcolor {
-    color: #000;
+    color: var(--textcolor);
 }
 
 .USUI_popuptitlebar {
     display: flex;
-    border-bottom: 1px solid #000;
-    background-color: #666666;
+    border-bottom: var(--popupborder);
+    background-color: var(--titlebarbg);
     user-select: none;
+    flex-shrink: 0;
 }
 
 .USUI_titlebarbutton {
-    height: 24px;
     padding: 5px;
     line-height: 0.5rem;
-    border: 2px outset;
+    border: var(--btnborder);
     &:active {
-        border: 2px inset;
+        border: var(--btnborderactive);
     }
 }
 
 .USUI_popupcontent {
-    color: #000000;
-    max-height: calc(80vh - 26px);
-    height: 100%;
-    overflow: auto;
-    overflow-x: clip;
+    display: block;
+    flex: 1;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 .USUI_popupitem {
@@ -59,26 +77,26 @@
 .USUI_titlespan {
     font-size: 14px;
     margin: 0 5px;
-    color: #ffffff;
+    color: var(--titlebarcolor);
     font-weight: bold;
 }
 
 .USUI_button {
     font-size: 14px;
     cursor: pointer;
-    font-family: rubik, helvetica, arial, sans-serif;
+    font-family: sans-serif;
     text-align: center;
     align-content: center;
-    background-color: #e9e9ed;
-    border: 2px outset #aaa;
-    color: #000;
+    background-color: var(--btnbgcolor);
+    border: var(--btnborder);
+    color: var(--btncolor);
     &:active,
-    .button:has(img:active) {
-        border: 2px inset #aaa;
-        background-color: #aaaaaa;
+    &:has(img:active) {
+        border: var(--btnborderactive);
+        background-color: var(--btnbgcoloractive);
     }
     &[disabled] {
-        text-decoration: solid line-through 2px;
+        text-decoration: var(--disabledtext);
     }
 }
 
@@ -106,21 +124,23 @@
     height: 32px;
     position: static;
     padding: 5px;
-    border: 1px solid #7f7f7f;
-    background-color: #d6d6d6;
+    border: 1px solid #8f8f9d;
+    background-color: #e9e9ed;
     border-radius: 4px;
     align-content: center;
     .USUI_M_colorInput_chip {
         box-sizing: border-box;
         background-color: #000000;
-        border: 1px solid #7f7f7f;
+        border: 1px solid #808080;
         width: 100%;
         height: 100%;
     }
     &:hover {
-        background-color: #b4b4b4;
+        background-color: #d0d0d7;
+        border-color: #676774;
         &:active {
-            background-color: #8a8a8a;
+            background-color: #b1b1b9;
+            border-color: #484851;
         }
     }
 }
@@ -129,7 +149,8 @@
     max-width: 100%;
     display: flex;
     flex-direction: row;
-    height: 32px;
+    min-height: 32px;
+    flex: 0 0 auto;
     &:not(:last-child) {
         margin-bottom: 2px;
     }
@@ -153,7 +174,7 @@
 }
 
 .USUI_M_bbLabel {
-    color: #000;
+    color: var(--textcolor);
 }
 
 .USUI_M_bbInput[type="range"] {
@@ -168,7 +189,7 @@
 }
 
 .USUI_M_bbTickCont {
-    color: #000;
+    color: var(--textcolor);
     display: flex;
     max-height: 24px;
     flex: 1;
@@ -181,7 +202,7 @@
 
 .USUI_M_bbTick {
     width: 0px;
-    color: #000;
+    color: var(--textcolor);
     font-size: 100%;
     position: relative;
 }
@@ -199,17 +220,60 @@
     white-space: nowrap;
 }
 
-.USUI_M_bbRangeTooltip {
+.USUI_M_bbRangeTooltip, .USUI_M_bbRangeTooltipInput {
     z-index: 10000;
-    background-color: #fff;
+    background-color: var(--bodycolor);
     padding: 4px;
     max-height: 24px;
-    border: 2px outset rgb(170, 170, 170);
+    border: var(--btnborder);
     position: fixed;
     top: 0;
     left: 0;
     display: none;
+}
+
+.USUI_M_bbRangeTooltip {
     user-select: none;
     pointer-events: none;
     line-height: 0.8;
+}
+
+.USUI_M_bbRangeTooltipInput {
+    line-height: 0.8;
+    &:focus-within {
+        display: block!important;
+    }
+}
+
+.USUI_M_bbTextCont {
+    text-align: center;
+    align-items: center;
+    p,h1,h2,h3,h4,h5,h6 {
+        line-height: 1;
+    }
+    hr {
+        height: 0px;
+    }
+}
+
+.USUI_M_bbText {
+    margin: 0;
+    flex: 1;
+}
+
+.USUI_popup_T_defaultdark {
+    --bodycolor: #000000;
+    --textcolor: #ffffff;
+    --popupshadow: #00000050 2px 2px 15px;
+    --popupborder: 1px solid #353535;
+    --titlebarbg: #666666;
+    --titlebarcolor: #ffffff;
+    --btnbgcolor: #6b6b8a;
+    --btnbgcoloractive: #333347;
+    --btncolor: #ffffff;
+    --btnborder: 2px outset #565565;
+    --popupradius: 0 12px 12px 12px;
+    --btnborderactive: 2px inset #4e4e4e;
+    --disabledtext: solid line-through 2px;
+    scrollbar-color: #676768 #111;
 }
