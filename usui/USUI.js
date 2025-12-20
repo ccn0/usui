@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.024beta",
+    version: "0.025beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
@@ -367,6 +367,9 @@ const USUI = {
             colorInput.addEventListener("keydown", (e)=>{
                 if (e.key == "Enter" || e.key == " ") {colorPrompt(e)}
             });
+            Object.entries(params).forEach(([key,val])=>{
+                if (!["red","green","blue","value"].includes(key)) colorInput[key] = val;
+            });
 
             colorInput.appendChild(colorChip);
             return colorInput;
@@ -413,7 +416,7 @@ const USUI = {
             input.classList.add("USUI_M_bbInput");
             input.type = params.type || "text";
             Object.entries((params ?? {})).forEach(([key,val])=>{
-                if (!["id","type","label","labelAttributes","round","ticks","tickSet","tooltip"].includes(key)) input[key] = val;
+                if (!["type","label","labelAttributes","round","ticks","tickSet","tooltip"].includes(key)) input[key] = val;
             });
 
             inputCont.appendChild(label);
@@ -482,8 +485,7 @@ const USUI = {
                         tooltip.style.top = `${rect.bottom}px`;
                         tooltip.style.left = `${rect.left}px`;
                     };
-
-                    input.addEventListener("input",(e)=>{
+                    function peekVal(e,time) {
                         updateTooltipPos();
                         tooltip.textContent = e.target.value;
                         tooltip.style.display = "block";
@@ -493,22 +495,14 @@ const USUI = {
 
                         hideTimeout = setTimeout(() => {
                             tooltip.style.display = "none";
-                        }, 1000);
-                    });
+                        }, time);
+                    };
+
+                    input.addEventListener("input",(e)=>peekVal(e,2000));
+                    input.addEventListener("click",(e)=>peekVal(e,1000));
+                    input.addEventListener("touchstart",(e)=>peekVal(e,1000));
                     input.addEventListener("mouseleave",(e)=>{
                         tooltip.style.display = "none";
-                    });
-                    input.addEventListener("click",(e)=>{
-                        updateTooltipPos();
-                        tooltip.textContent = e.target.value;
-                        tooltip.style.display = "block";
-                        if (hideTimeout) {
-                            clearTimeout(hideTimeout);
-                        };
-
-                        hideTimeout = setTimeout(() => {
-                            tooltip.style.display = "none";
-                        }, 2000);
                     });
                 };
                 if ("tooltipInput" in params) {
@@ -584,6 +578,9 @@ const USUI = {
         })=>{
             const bbBCont = document.createElement("div");
             bbBCont.classList.add("USUI_M_bbContainer","USUI_M_bbButtons");
+            Object.entries(params).forEach(([key,val])=>{
+                if (!["buttons"].includes(key)) bbBCont[key] = val;
+            });
 
             params.buttons.forEach(btn=>{
                 bbBCont.appendChild(createBtn(btn));
