@@ -189,7 +189,6 @@
             position: ["6%","6%"],
             id: "bbtest",
             title: "USUI Building Blocks",
-            theme: "USUI_popup_T_defaultdark",
             style: "height:auto;max-height:50vh;",
             buttons: [
                 {
@@ -208,35 +207,72 @@
         });
 
         alertContent.appendChild(USUI.modules.BBtext({
+            tag:"img",
+            src:"logowordmark.png",
+        }));
+        alertContent.appendChild(USUI.modules.BBtext({
             text:"Building Blocks",
             tag:"h1",
         }));
         alertContent.appendChild(USUI.modules.BBtext({
-            text:"Test out the Building Blocks modules!"
+            tag:"details",
+            innerHTML:"<summary>I have keys but no doors. I have space but no room. You can enter but can't leave. What am I?</summary>A keyboard. This was taken straight from mdn"
         }));
 
-        const [exampleText,eginput] = USUI.modules.BBinput({
-            id: "exampleInput",
-            type:"text",
-            label: "Text Input",
-            value:"hello world!",
+        const li = document.createElement('li');
+        li.textContent = 'Test item';
+        alertContent.appendChild(USUI.modules.BBtext({
+            tag:"ul",
+            id:"exampleul",
+            innerHTML: li,
+        }));
+
+        function makeInputTest(params = {
+            type: "text"
+        }) {
+            const [exampleText,eginput] = USUI.modules.BBinput({
+                id: "exampleInput"+params.type,
+                type:params.type,
+                labelAttributes: {
+                    innerHTML: `<code>${params.type}</code> Input`
+                }
+            });
+            if ("value" in params) eginput.value = params.value;
+            eginput.addEventListener('change',(e)=>{
+                console.log(e.target.value);
+            });
+            alertContent.appendChild(exampleText);
+        };
+        ["button","date","datetime-local","email","file","password","time","text","submit"].forEach((type)=>{
+            makeInputTest({type: type});
         });
-        eginput.addEventListener('change',(e)=>{
-            console.log(e.target.value);
-        });
-        alertContent.appendChild(exampleText);
 
         const [exampleColor,egcolori] = USUI.modules.BBinput({
             id: "exampleBBCI",
             type: "color",
             label: "Color Input",
-            value:"#ffaa00",
+            red: 255,
+            green: 85,
+            blue: 150,
         });
         egcolori.addEventListener('change',(e)=>{
             console.log(e.target.dataset.value);
             alertContainer.querySelector("#bbexampleparagraph").style.backgroundColor = e.target.dataset.value;
         });
         alertContent.appendChild(exampleColor);
+
+        const [exampleNColor,egncolori] = USUI.modules.BBinput({
+            id: "exampleNBBCI",
+            type: "color",
+            label: "Native Color Input",
+            value: "#ffaa00",
+            forceNative: true,
+        });
+        egncolori.addEventListener('change',(e)=>{
+            console.log(e.target.value);
+            alertContainer.querySelector("#bbexampleparagraph").style.backgroundColor = e.target.value;
+        });
+        alertContent.appendChild(exampleNColor);
 
         const [exampleBox,egbox] = USUI.modules.BBinput({
             id: "exampleBox",
@@ -257,7 +293,7 @@
             value: 10,
             min:0,
             max:100,
-            step:1,
+            step:5,
             ticks: 5,
             tooltip: true,
         });
@@ -351,24 +387,26 @@
             style: "padding: 15px;display: block;flex-direction: column;",
         });
 
+        popupContent.appendChild(USUI.modules.BBtext({
+            tag:"h1",
+            text:"Alert Text Example",
+        }));
+
         const [exampleText,eginput] = USUI.modules.BBinput({
             id: "exampleInput",
             type:"text",
             label: "Text Input",
-            value:"#ffaa00",
-        });
-        eginput.addEventListener('change',(e)=>{
-            console.log(e.target.value);
+            value:"Hello world!",
         });
         popupContent.appendChild(exampleText);
 
         popupContent.appendChild(USUI.modules.BBbuttons({
             buttons: [
                 {
-                    text:"Log 2+2",
-                    title: "Log in the Console 2+2",
+                    text:"Alert",
+                    title: "Alerts the page of the value of the text input",
                     action: ()=>{
-                        console.log(2+2);
+                        alert(eginput.value);
                     },
                 },
             ]

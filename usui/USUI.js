@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.025beta",
+    version: "0.026beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
@@ -22,9 +22,18 @@ const USUI = {
             document.head.appendChild(usuiCSS);
         };
     },
-    closeMenu: (menu)=>{
-        USUI.popups.forEach(popup => {if (popup == menu) {popup.remove()}});
-        USUI.popups = USUI.popups.filter(item => item !== menu);
+    closeMenu: (menu) => {
+        if (typeof menu === "object" && menu instanceof HTMLElement) {
+            USUI.popups.forEach(popup => {
+                if (popup === menu) popup.remove();
+            });
+            USUI.popups = USUI.popups.filter(item => item !== menu);
+        } else if (typeof menu === "string") {
+            USUI.popups.forEach(popup => {
+                if (popup.id === menu || popup.classList.contains(menu)) popup.remove();
+            });
+            USUI.popups = USUI.popups.filter(item => item.id !== menu && !item.classList.contains(menu));
+        };
     },
     closeAll: ()=>{
         USUI.popups.forEach(popup => popup.remove());
@@ -33,6 +42,11 @@ const USUI = {
     lib: {
         round: (num, digits) => {
             return Number(num.toFixed(digits));
+        },
+        __autoAttribute__: (disallowList = [], paramsObj, element) => {
+            Object.entries((paramsObj ?? {})).forEach(([key,val])=>{
+                if (!disallowList.includes(key)) element[key] = val;
+            });
         },
     },
     createPopup: (params = {
@@ -92,9 +106,7 @@ const USUI = {
             tbBtn.addEventListener("mousedown", (event) => {
                 event.stopPropagation();
             });
-            Object.entries(button).forEach(([key,val])=>{
-                if (!["text","classes","event","action"].includes(key)) tbBtn[key] = val;
-            });
+            USUI.lib.__autoAttribute__(["text","classes","event","action"],button,tbBtn);
             popupTitlebar.appendChild(tbBtn);
         });
 
@@ -185,9 +197,7 @@ const USUI = {
             isDragging = false;
         });
 
-        Object.entries(params).forEach(([key,val])=>{
-            if (!["stay","position","buttons","title","fencing","theme","classes","style"].includes(key)) popupContainer[key] = val;
-        });
+        USUI.lib.__autoAttribute__(["stay","position","buttons","title","fencing","theme","classes","style"],params,popupContainer);
         if ("style" in params) popupContainer.style.cssText += params.style;
 
         popupContainer.addEventListener("mousedown",incrementLayer);
@@ -201,9 +211,7 @@ const USUI = {
     createPopupContent: (params = {}) => {
         const popupContent = document.createElement('div');
         popupContent.classList.add("USUI_popupcontent", "USUI_textcolor");
-        Object.entries(params).forEach(([key,val])=>{
-            if (![].includes(key)) popupContent[key] = val;
-        });
+        USUI.lib.__autoAttribute__([],params,popupContent);
         return popupContent;
     },
     modules: {
@@ -328,7 +336,7 @@ const USUI = {
                     colorInput.dispatchEvent(changeEvent);
                 };
 
-                colorInput.appendChild(prompt);
+                colorInput.after(prompt);
                 sliderR.focus();
                 
                 function handleClickOutside(e) {
@@ -367,9 +375,7 @@ const USUI = {
             colorInput.addEventListener("keydown", (e)=>{
                 if (e.key == "Enter" || e.key == " ") {colorPrompt(e)}
             });
-            Object.entries(params).forEach(([key,val])=>{
-                if (!["red","green","blue","value"].includes(key)) colorInput[key] = val;
-            });
+            USUI.lib.__autoAttribute__(["red","green","blue","value"],params,colorInput);
 
             colorInput.appendChild(colorChip);
             return colorInput;
@@ -386,6 +392,7 @@ const USUI = {
             tickSet: false,
             tooltip: false,
             tooltipInput: false,
+            forceNative: false,
         })=>{
             const inputCont = document.createElement("div");
             inputCont.classList.add("USUI_M_bbContainer");
@@ -393,20 +400,23 @@ const USUI = {
             const label = document.createElement("label");
             label.classList.add("USUI_M_bbLabel");
             label.htmlFor = params.id;
-            label.textContent = params.label;
-            Object.entries((params.labelAttributes ?? {})).forEach(([key,val])=>{
-                label.setAttribute(key,val);
-            });
-            if (params.type === "color") {
-                const colorMod = USUI.modules.iRGB({
-                    value: params.value || "#000000"
-                });
+            if ("label" in params && typeof params.label == "string") label.textContent = params.label;
+            if ("labelAttributes" in params) USUI.lib.__autoAttribute__([],params.labelAttributes,label);
+            if (params.type === "color" && !params.forceNative) {
+                const toParse = {};
+                if ("value" in params) toParse.value = params.value;
+                if ("red" in params ||
+                    "green" in params ||
+                    "blue" in params) {
+                        toParse.red = params.red || 0;
+                        toParse.green = params.green || 0;
+                        toParse.blue = params.blue || 0;
+                    };
+                const colorMod = USUI.modules.iRGB({...toParse});
                 colorMod.classList.add("USUI_M_bbInput");
                 colorMod.type = params.type || "text";
                 colorMod.id = params.id;
-                Object.entries(params).forEach(([key,val])=>{
-                    if (!["id","type","label","labelAttributes","tickSet","tooltip"].includes(key)) colorMod[key] = val;
-                });
+                USUI.lib.__autoAttribute__(["id","type","label","labelAttributes","tickSet","tooltip","value","red","green","blue"],params,colorMod);
                 inputCont.appendChild(label);
                 inputCont.appendChild(colorMod);
                 return [inputCont, colorMod];
@@ -415,11 +425,11 @@ const USUI = {
             const input = document.createElement("input");
             input.classList.add("USUI_M_bbInput");
             input.type = params.type || "text";
-            Object.entries((params ?? {})).forEach(([key,val])=>{
-                if (!["type","label","labelAttributes","round","ticks","tickSet","tooltip"].includes(key)) input[key] = val;
-            });
+            USUI.lib.__autoAttribute__(["type","label","labelAttributes","round","ticks","tickSet","tooltip","forceNative"],params,input);
 
             inputCont.appendChild(label);
+            if (params.type == "button" || params.type == "submit") input.classList.add("USUI_button");
+            if (params.type == "file") input.classList.add("USUI_fibutton");
             if (params.type != "range") {
                 inputCont.appendChild(input)
             };
@@ -508,9 +518,7 @@ const USUI = {
                 if ("tooltipInput" in params) {
                     let hideTimeout = null;
                     const tooltip = document.createElement("input");
-                    Object.entries((params ?? {})).forEach(([key,val])=>{
-                        if (!["id","type","label","labelAttributes","round","ticks","tickSet","tooltip","tooltipInput"].includes(key)) tooltip[key] = val;
-                    });
+                    USUI.lib.__autoAttribute__(["id","type","label","labelAttributes","round","ticks","tickSet","tooltip","tooltipInput"],params,tooltip);
                     tooltip.type = "number";
                     tooltip.classList.add("USUI_M_bbRangeTooltipInput");
                     tooltip.value = input.value;
@@ -578,9 +586,7 @@ const USUI = {
         })=>{
             const bbBCont = document.createElement("div");
             bbBCont.classList.add("USUI_M_bbContainer","USUI_M_bbButtons");
-            Object.entries(params).forEach(([key,val])=>{
-                if (!["buttons"].includes(key)) bbBCont[key] = val;
-            });
+            USUI.lib.__autoAttribute__(["buttons"],params,bbBCont);
 
             params.buttons.forEach(btn=>{
                 bbBCont.appendChild(createBtn(btn));
@@ -594,10 +600,7 @@ const USUI = {
             }) {
                 const button = document.createElement("button");
                 button.classList.add("USUI_button");
-                Object.entries(params).forEach(([key,val])=>{
-                    if (!["text","classes","action"].includes(key)) button[key] = val;
-                });
-                button.textContent = params.text || "Button";
+                if ("text" in params) button.textContent = params.text;
                 if (params.classes) {
                     button.classList.add(...params.classes);
                 };
@@ -605,6 +608,7 @@ const USUI = {
                     e.stopPropagation();
                     params.action(e);
                 });
+                USUI.lib.__autoAttribute__(["text","classes","action"],params,button);
                 return button;
             };
 
@@ -616,26 +620,33 @@ const USUI = {
             tag:"p",
             classes:[],
         })=>{
-            const bbCont = document.createElement("div");
-            bbCont.classList.add("USUI_M_bbContainer","USUI_M_bbTextCont");
+            const bbTxtCont = document.createElement("div");
+            bbTxtCont.classList.add("USUI_M_bbContainer","USUI_M_bbTextCont");
 
-            const textE = document.createElement((params.tag || "p"));
-            textE.classList.add("USUI_M_bbText");
-            textE.textContent = params.text || "";
-            if (params.classes) textE.classList.add(...params.classes);
-            if ("innerHTML" in params && !("tag" in params)) {
-                if (params.classes) {
-                    bbCont.classList.add(...params.classes);
+            const textEl = document.createElement((params.tag || "p"));
+            textEl.classList.add("USUI_M_bbText");
+            textEl.textContent = params.text || "";
+            if (params.classes) textEl.classList.add(...params.classes);
+            if ("innerHTML" in params) {
+                if (!("tag" in params)) {
+                    if (params.classes) {
+                        bbTxtCont.classList.add(...params.classes);
+                    };
+                    bbTxtCont.innerHTML = params.innerHTML;
+                    return bbTxtCont;
+                } else if (
+                    typeof params.innerHTML === "object" &&
+                    params.innerHTML instanceof HTMLElement
+                ) {
+                    USUI.lib.__autoAttribute__(["text","classes","tag","innerHTML"],params,bbTxtCont);
+                    bbTxtCont.appendChild(params.innerHTML);
+                    return bbTxtCont;
                 };
-                bbCont.innerHTML = params.innerHTML;
-                return bbCont;
             };
-            Object.entries(params).forEach(([key,val])=>{
-                if (!["text","classes","tag"].includes(key)) textE[key] = val;
-            });
-            bbCont.appendChild(textE);
+            USUI.lib.__autoAttribute__(["text","classes","tag"],params,textEl);
+            bbTxtCont.appendChild(textEl);
 
-            return bbCont;
+            return bbTxtCont;
         },
     }
 };
