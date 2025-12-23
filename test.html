@@ -35,7 +35,7 @@
 <body>
     <noscript>this is a javascript library toolkit thing, you could probably guess why this is showing up</noscript>
     <script>
-    openIFrame({url:"./usui.html"});
+    openIFrame({html:"<p>USUI is a lightweight JavaScript toolkit designed to make creating menus or configs for Userscripts easier. You can create Popups, which are draggable and customizable windows, with many settings to change their behavior. USUI also comes with built-in modules to ease development of configuration menus, and have a standard look across browsers and mobile.</p>"});
     function openIFrame(params) {
         /* this code is most definitely INSECURE AND NOT FOR PRODUCTION, so I'd make my own if I were you... */
         const oiContainer = USUI.createPopup({
@@ -64,6 +64,10 @@
                     title: "View USUI's built-in UI modules",
                     event: buildingblocks
                 },
+                {
+                    textContent: "No Titlebar",
+                    event: bbTemplate
+                },
             ],
         });
 
@@ -75,9 +79,7 @@
         iframe.style.cssText = "flex:1;border:none;width:100%;height:100%";
 
         if (params.html && !params.url) {
-            const blob = new Blob([params.html], { type: "text/html" });
-            const blobURL = URL.createObjectURL(blob);
-            iframe.src = blobURL;
+            iframe.srcdoc = params.html;
         } else {
             iframe.src = params.url;
         };
@@ -85,7 +87,7 @@
 
         oiContainer.appendChild(errContent);
         document.body.appendChild(oiContainer);
-    }
+    };
     
     function USUIalert(message = "",params = {
         titletext: "Alert",
@@ -369,18 +371,19 @@
             stay: false, 
             position: ["6%","6%"],
             id: "bbtemplate",
-            title: "Building Blocks Template",
             style: "height:auto;",
-            buttons: [
-                {
-                    textContent: "X",
-                    title: "Close Window",
-                    classes: ["closebtn"],
-                    event: () => {
-                        USUI.closeMenu(popupContainer);
-                    }
-                },
-            ]
+            titlebar: false,
+            // title: "Building Blocks Template",
+            // buttons: [
+            //     {
+            //         textContent: "X",
+            //         title: "Close Window",
+            //         classes: ["closebtn"],
+            //         event: () => {
+            //             USUI.closeMenu(popupContainer);
+            //         }
+            //     },
+            // ]
         });
 
         const popupContent = USUI.createPopupContent({
@@ -402,6 +405,12 @@
 
         popupContent.appendChild(USUI.modules.BBbuttons({
             buttons: [
+                {
+                    text:"close",
+                    action: ()=>{
+                        USUI.closeMenu(popupContainer);
+                    }
+                },
                 {
                     text:"Alert",
                     title: "Alerts the page of the value of the text input",

@@ -1,7 +1,7 @@
 /* 
     UserScript UI
     -- made by CCN0 -- https://usui.qog.app/ -- https://github.com/ccn0/usui/ --
-    version 0.026beta
+    version 0.027beta
 */
 
 .USUI_popup_T_DEFAULT {
@@ -22,12 +22,13 @@
 }
 
 .USUI_popup {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     z-index: var(--defaultpopupzindex);
     line-height: 24.5px;
     width: 480px;
-    height: 80vh;
+    height: auto;
     border: var(--popupborder);
     border-radius: var(--popupradius);
     overflow: hidden;
@@ -49,6 +50,7 @@
     background-color: var(--titlebarbg);
     user-select: none;
     flex-shrink: 0;
+    min-height: 25.5px;
 }
 
 .USUI_titlebarbutton {
@@ -81,7 +83,8 @@
     font-weight: bold;
 }
 
-.USUI_button,.USUI_fibutton::file-selector-button {
+.USUI_button,
+.USUI_fibutton::file-selector-button {
     font-size: 14px;
     cursor: pointer;
     font-family: sans-serif;

@@ -168,6 +168,11 @@ Sets the z-index of the popup. This disables interacting with popups to move the
 
 Sets the title of the popup. Defaults to `"Popup"`.
 
+* `titlebar: true`
+
+Boolean to enable the titlebar at the top of popups. Default is true.
+You can have a titlebar even if the popup has no `title`.
+
 * `theme: "USUI_popup_T_DEFAULT"`
 
 Adds class for a theme to use on the popup.

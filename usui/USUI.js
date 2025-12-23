@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.026beta",
+    version: "0.027beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
@@ -54,8 +54,9 @@ const USUI = {
         stay: false,
         layer: USUI.__layer__,
         position: USUI.defaultpos || ["0","0"],
-        buttons: [],
+        titlebar: true,
         title: "Popup",
+        buttons: [],
         fencing: false,
         theme: "USUI_popup_T_DEFAULT",
         classes: [],
@@ -204,7 +205,7 @@ const USUI = {
         popupContainer.addEventListener("touchstart",incrementLayer);
 
         popupTitlebar.appendChild(Titlespan);
-        popupContainer.appendChild(popupTitlebar);
+        if (params.titlebar !== false) {popupContainer.appendChild(popupTitlebar);}
         USUI.popups.push(popupContainer)
         return popupContainer;
     },
