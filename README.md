@@ -217,8 +217,8 @@ or the `id` of the popup.
 #### `closeAll()` Function
 
 Closes all popups in `USUI.popups`. Useful for if your Userscript only uses 1 popup.
-Be careful using this, as it may close popups unassociated with your Userscript, made
-by other scripts, or by the webpage.
+Be careful using this with `@unwrap`, as it may close popups unassociated with your Userscript,
+made by other scripts, or by the webpage.
 
 ### Modules
 
