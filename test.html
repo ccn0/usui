@@ -20,7 +20,7 @@
         }
 
         @media (max-width: 500px) {
-            #bbtest,#modeultest {
+            #bbtest,#modeultest,#bbtemplate {
                 max-width: 100%;
             }
         }
@@ -368,22 +368,28 @@
 
     function bbTemplate() {
         const popupContainer = USUI.createPopup({
-            stay: false, 
-            position: ["6%","6%"],
+            position: ["50%","50%"],
             id: "bbtemplate",
-            style: "height:auto;",
-            titlebar: false,
-            // title: "Building Blocks Template",
-            // buttons: [
-            //     {
-            //         textContent: "X",
-            //         title: "Close Window",
-            //         classes: ["closebtn"],
-            //         event: () => {
-            //             USUI.closeMenu(popupContainer);
-            //         }
-            //     },
-            // ]
+            style: "height:auto;transform:translate(-50%,-50%);",
+            fencing:true,
+            dataset: {
+                balls: true,
+            },
+            titlebar: true,
+            title: "Building Blocks Template",
+            buttons: [
+                {
+                    textContent: "X",
+                    title: "Close Window",
+                    classes: ["closebtn"],
+                    dataset: {
+                        hello: "world",
+                    },
+                    event: () => {
+                        USUI.closeMenu(popupContainer);
+                    }
+                },
+            ]
         });
 
         const popupContent = USUI.createPopupContent({

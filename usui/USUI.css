@@ -1,7 +1,7 @@
 /* 
     UserScript UI
     -- made by CCN0 -- https://usui.qog.app/ -- https://github.com/ccn0/usui/ --
-    version 0.027betaP01
+    version 0.028beta
 */
 
 .USUI_popup_T_DEFAULT {
@@ -10,7 +10,7 @@
     --defaultpopupzindex: 400;
     --popupshadow: #00000050 2px 2px 15px;
     --popupborder: 1px solid #000;
-    --popupradius: 0 12px 12px 12px;
+    --popupradius: 0;
     --titlebarbg: #666666;
     --titlebarcolor: #ffffff;
     --btnbgcolor: #e9e9ed;
@@ -280,7 +280,6 @@
     --btnbgcoloractive: #333347;
     --btncolor: #ffffff;
     --btnborder: 2px outset #565565;
-    --popupradius: 0 12px 12px 12px;
     --btnborderactive: 2px inset #4e4e4e;
     --disabledtext: solid line-through 2px;
     scrollbar-color: #676768 #111;

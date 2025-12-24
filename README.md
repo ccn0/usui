@@ -59,6 +59,9 @@ Example:
 
 * Extra attributes just passthrough. Any additional parameters passed to a function are added as HTML attributes on the element. Some exceptions are listed in their respective sections.
 
+* If a `dataset` object is used as a parameter, it adds all keys and values to the dataset of
+the element.
+
 #### Themes
 
 By default, all popups will be using the default USUI theme, `USUI_popup_T_DEFAULT`, which is very

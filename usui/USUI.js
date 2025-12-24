@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.027beta",
+    version: "0.028beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
@@ -44,8 +44,15 @@ const USUI = {
             return Number(num.toFixed(digits));
         },
         __autoAttribute__: (disallowList = [], paramsObj, element) => {
-            Object.entries((paramsObj ?? {})).forEach(([key,val])=>{
-                if (!disallowList.includes(key)) element[key] = val;
+            Object.entries(paramsObj ?? {}).forEach(([key, val]) => {
+                if (disallowList.includes(key)) return;
+                if (key === "dataset" && typeof val === "object") {
+                    Object.entries(val).forEach(([dKey, dVal]) => {
+                        element.dataset[dKey] = String(dVal);
+                    });
+                } else {
+                    element[key] = val;
+                };
             });
         },
     },
