@@ -37,6 +37,10 @@ the 2 strings of CSS units.
 
 #### Schemas
 
+##### Positions
+
+Positions are usually `[left, top]` because its way easier to grasp X and Y, but not Y and X.
+
 ##### Button Objects
 
 Most if not all button objects in USUI are an object with properties, `text`, `title`, and `action`.
@@ -73,8 +77,8 @@ Themes are also just classes because its simpler and allows extra customizabilit
 
 * `version: ""`
 
-`USUI.version` returns the version of USUI the script is currently using. This exists to get the version
-of USUI you're using to make sure you're up to date, and as metadata.
+`USUI.version` is a string that returns the version of USUI the script is currently using.
+This exists to get the version of USUI you're using to make sure you're up to date, and as metadata.
 
 * `popups: []`
 
@@ -93,7 +97,7 @@ It by default uses `"USUI_popup_T_DEFAULT"`.
 
 * `spawnCSS(params)`
 
-Injects the styles for USUI to work.
+Injects the styles to the document's head for USUI to work.
 
 #### `spawnCSS` Parameters Object
 
@@ -110,7 +114,7 @@ String to load CSS from a specific source URL, the default source is `"https://u
 ### Popups
 
 Popups are floating windows that you can create that can be dragged around the screen.
-You use `createPopup` to create the actual floating window, and using `appendChild`, you can insert
+You use `createPopup` to create the actual floating window, and using `popupContainer.appendChild()`, you can insert
 a `createPopupContent` to easily begin creating a popup. You can also manually create the popup's content.
 
 Example of very barebones popup:
@@ -121,7 +125,6 @@ const popupContainer = USUI.createPopup({
     position: ["6%","6%"],
     id: "bbtemplate",
     title: "Building Blocks Template",
-    style: "height:auto;",
     buttons: [
         {
             textContent: "X",
@@ -191,21 +194,7 @@ Array that adds classes to popup.
 
 * `buttons: []`
 
-###### Titlebar Button Array Object Parameters
-
-* `text`
-
-Sets the text on the button.
-
-* `classes:[]`
-
-Array that sets the classes of the button.
-
-* `action`/`event`
-
-The function of the button that runs when clicked.
-
-* Excess parameters are set as attributes of the button.
+Adds buttons to the titlebar of the popup. The buttons start on the left of the titlebar.
 
 #### `closeMenu(popup)` Function
 
@@ -223,12 +212,13 @@ made by other scripts, or by the webpage.
 ### Modules
 
 Modules are extra elements and functions that allow you to make elements in your UI easier.
-All elements have to be appended to the popup content or page using `appendChild()`.
+All elements have to be appended to the element or page using `appendChild()`.
 
 #### Color Input `iRGB(params = {})`
 
 Returns an element, which like the normal color input contains a color chip,
 that acts like a color input, but it looks the same on all browsers.
+
 When clicked, it shows a color prompt below the input with sliders for Red, Green, Blue,
 and a text input for copying/pasting a hex code, which changes color while changing the value of the sliders or text box. It supports 3 digit (`#abc`), 6 digit hex codes (`#abcdef`), and setting
 the values of Red, Green, and Blue as numbers manually.
@@ -264,8 +254,8 @@ Sets the individual RGB values to be used in the value of the color input.
 Any exclusions will be set to 0. Values must be numbers and between 0 and 255.
 
 * All excess parameters are set as attributes for the color input element.
-* If both `value` and `red`, `green`, or `blue` are passed, the actual RGB values
-* take precedent over the hex color.
+* If both `value` and `red`, `green`, or `blue` are passed, the actual RGB values take
+precedent over the hex color.
 
 ### Building Blocks
 
@@ -315,6 +305,10 @@ Sets the HTML attributes of the label element.
 * `value: String || Number` or `checked: Boolean`
 
 Sets the `value`/`checked` attribute of the input element.
+
+* `forceNative: false`
+
+Forces the input to use the native variant of the input instead of modules.
 
 * Excess parameters are set as attributes of the input element.
 
@@ -396,23 +390,7 @@ Using any parameter that isn't `buttons` will be added to the container as attri
 
 * `buttons: []` Buttons
 
-Sets the array of button objects to add.
-
-###### `BBbuttons` Array Button Object Parameters
-
-* `text: ""`
-
-Set the `textContent` of the button.
-
-* `classes: []`
-
-Array that sets the classes of the button.
-
-* `action: ()=>{}`
-
-Sets the event listener `"click"` of the button to a function.
-
-* Excess parameters are set as attributes of the button.
+Array of button objects to add.
 
 #### Text `BBtext()`
 
@@ -461,7 +439,6 @@ function bbTemplate() {
         position: ["6%","6%"],
         id: "bbtemplate",
         title: "Building Blocks Template",
-        style: "height:auto;",
         buttons: [
             {
                 textContent: "X",
