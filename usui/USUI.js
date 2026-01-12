@@ -4,12 +4,29 @@
 */
 
 const USUI = {
-    version: "0.028beta",
+    version: "0.029beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
     __layer__: 400,
     popuptheme: "USUI_popup_T_DEFAULT",
+    lib: {
+        round: (num, digits) => {
+            return Number(num.toFixed(digits));
+        },
+        __autoAttribute__: (disallowList = [], paramsObj, element) => {
+            Object.entries(paramsObj ?? {}).forEach(([key, val]) => {
+                if (disallowList.includes(key)) return;
+                if (key === "dataset" && typeof val === "object") {
+                    Object.entries(val).forEach(([dKey, dVal]) => {
+                        element.dataset[dKey] = String(dVal);
+                    });
+                } else {
+                    element[key] = val;
+                };
+            });
+        },
+    },
     spawnCSS: (params = {
         overwrite:false,
         host:"https://usui.qog.app/lib/USUI.css",
@@ -39,23 +56,6 @@ const USUI = {
         USUI.popups.forEach(popup => popup.remove());
         USUI.popups = [];
     },
-    lib: {
-        round: (num, digits) => {
-            return Number(num.toFixed(digits));
-        },
-        __autoAttribute__: (disallowList = [], paramsObj, element) => {
-            Object.entries(paramsObj ?? {}).forEach(([key, val]) => {
-                if (disallowList.includes(key)) return;
-                if (key === "dataset" && typeof val === "object") {
-                    Object.entries(val).forEach(([dKey, dVal]) => {
-                        element.dataset[dKey] = String(dVal);
-                    });
-                } else {
-                    element[key] = val;
-                };
-            });
-        },
-    },
     createPopup: (params = {
         id: "unknownPopup",
         stay: false,
@@ -66,6 +66,7 @@ const USUI = {
         buttons: [],
         fencing: false,
         theme: "USUI_popup_T_DEFAULT",
+        handle: undefined,
         classes: [],
     }) => {
         const popupContainer = document.createElement("div");
@@ -81,12 +82,33 @@ const USUI = {
             popupContainer.style.top = USUI.position[1];
         } else {
             if ("position" in params) {
-                popupContainer.style.left = params.position[0];
-                popupContainer.style.top = params.position[1];
-                USUI.position = [params.position[0], params.position[1]];
+                if (Array.isArray(params.position)) {
+                    popupContainer.style.left = params.position[0];
+                    popupContainer.style.top = params.position[1];
+                    USUI.position = [params.position[0], params.position[1]];
+                } else if (params.position == "center") {
+                    const observer = new MutationObserver((mutations, obs) => {
+                        if (popupContainer.isConnected) {
+                            const rect = popupContainer.getBoundingClientRect();
+                            const centerpos = [
+                                `${(window.innerWidth / 2) - (rect.width / 2)}px`,
+                                `${(window.innerHeight / 2) - (rect.height / 2)}px`
+                            ];
+                            popupContainer.style.left = centerpos[0];
+                            popupContainer.style.top = centerpos[1];
+                            USUI.position = [centerpos[0], centerpos[1]];
+                            obs.disconnect();
+                        };
+                    });
+                    observer.observe(document.body, { childList: true, subtree: true });
+                } else {
+                    popupContainer.style.left = USUI.defaultpos[0];
+                    popupContainer.style.top = USUI.defaultpos[1];
+                    USUI.position = [...USUI.defaultpos];
+                };
             } else {
-                popupContainer.style.left = USUI.position[0];
-                popupContainer.style.top = USUI.position[1];
+                popupContainer.style.left = USUI.defaultpos[0];
+                popupContainer.style.top = USUI.defaultpos[1];
                 USUI.position = [...USUI.defaultpos];
             };
         };
@@ -126,7 +148,10 @@ const USUI = {
         let initialX;
         let initialY;
 
-        popupTitlebar.addEventListener("mousedown", (e) => {
+        let handle = params.handle || popupTitlebar;
+        handle.classList.add("USUI_popuphandle");
+
+        handle.addEventListener("mousedown", (e) => {
             e.preventDefault();
             e.stopPropagation();
             isDragging = true;
@@ -135,7 +160,7 @@ const USUI = {
             incrementLayer();
         });
 
-        popupTitlebar.addEventListener("touchstart", (e) => {
+        handle.addEventListener("touchstart", (e) => {
             isDragging = true;
             initialX = e.touches[0].clientX;
             initialY = e.touches[0].clientY;
@@ -435,7 +460,9 @@ const USUI = {
             input.type = params.type || "text";
             USUI.lib.__autoAttribute__(["type","label","labelAttributes","round","ticks","tickSet","tooltip","forceNative"],params,input);
 
-            inputCont.appendChild(label);
+            if (typeof params.label !== "boolean" && params.label !== false) {
+                inputCont.appendChild(label);
+            };
             if (params.type == "button" || params.type == "submit") input.classList.add("USUI_button");
             if (params.type == "file") input.classList.add("USUI_fibutton");
             if (params.type != "range") {
@@ -523,62 +550,6 @@ const USUI = {
                         tooltip.style.display = "none";
                     });
                 };
-                if ("tooltipInput" in params) {
-                    let hideTimeout = null;
-                    const tooltip = document.createElement("input");
-                    USUI.lib.__autoAttribute__(["id","type","label","labelAttributes","round","ticks","tickSet","tooltip","tooltipInput"],params,tooltip);
-                    tooltip.type = "number";
-                    tooltip.classList.add("USUI_M_bbRangeTooltipInput");
-                    tooltip.value = input.value;
-                    tooltip.ariaHidden = true;
-                    tooltip.style.display = "none";
-                    inputCont.appendChild(tooltip);
-
-                    tooltip.addEventListener("input",(e)=>{
-                        input.value = e.target.value;
-                        const inputEvent = new Event("input", { bubbles: true });
-                        const changeEvent = new Event("change", { bubbles: true });
-
-                        input.dispatchEvent(inputEvent);
-                        input.dispatchEvent(changeEvent);
-                    });
-
-                    input.addEventListener("input",(e)=>{
-                        tooltip.style.display = "block";
-                        const rect = input.getBoundingClientRect();
-                        tooltip.style.top = `${rect.bottom}px`;
-                        tooltip.style.left = `${rect.left}px`;
-                        tooltip.value = e.target.value;
-                        if (hideTimeout) {
-                            clearTimeout(hideTimeout);
-                        };
-
-                        hideTimeout = setTimeout(() => {
-                            tooltip.style.display = "none";
-                        }, 1000);
-                    });
-                    input.addEventListener("mouseleave",()=>{
-                        if (hideTimeout) {
-                            clearTimeout(hideTimeout);
-                        };
-                        setTimeout(() => {
-                            tooltip.style.display = "none";
-                        }, 1000);
-                    });
-                    input.addEventListener("click",()=>{
-                        const rect = input.getBoundingClientRect();
-                        tooltip.style.top = `${rect.bottom}px`;
-                        tooltip.style.left = `${rect.left}px`;
-                        tooltip.style.display = "block";
-                        if (hideTimeout) {
-                            clearTimeout(hideTimeout);
-                        };
-
-                        hideTimeout = setTimeout(() => {
-                            tooltip.style.display = "none";
-                        }, 1500);
-                    });
-                };
             };
 
             return [inputCont, input];
@@ -655,6 +626,51 @@ const USUI = {
             bbTxtCont.appendChild(textEl);
 
             return bbTxtCont;
+        },
+        BBrow: (params = {
+            items: [
+                {
+                    buttons:[
+                        {
+                            text:"Button",
+                            title:"Button",
+                            action:()=>{}
+                        }
+                    ]
+                },
+                {
+                    type:"text",
+                    placeholder:"Input"
+                },
+            ]
+        })=>{
+            const bbRowCont = document.createElement("div");
+            bbRowCont.classList.add("USUI_M_bbContainer","USUI_M_bbRowCont");
+            USUI.lib.__autoAttribute__(["items"],params,bbRowCont);
+            let products = [];
+
+            params.items.forEach(object => {
+                let element = null;
+
+                if ("text" in object) {
+                    element = USUI.modules.BBtext(object);
+                } else if ("type" in object) {
+                    const inputSet = USUI.modules.BBinput(object);
+                    element = inputSet[0];
+                } else if ("buttons" in object) {
+                    element = USUI.modules.BBbuttons(object);
+                };
+                if (!element) return;
+
+                if (object.collapse) {
+                    element.classList.add("USUI_M_collapse");
+                };
+
+                bbRowCont.appendChild(element);
+                products.push(element);
+            });
+
+            return [bbRowCont, products];
         },
     }
 };

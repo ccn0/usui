@@ -179,6 +179,11 @@ Sets the title of the popup. Defaults to `"Popup"`.
 Boolean to enable the titlebar at the top of popups. Default is true.
 You can have a titlebar even if the popup has no `title`.
 
+* `handle: popupTitlebar`
+
+Sets the handle used to drag the popup around, default is the popup's titlebar.
+Must be an HTML element.
+
 * `theme: "USUI_popup_T_DEFAULT"`
 
 Adds class for a theme to use on the popup.
@@ -296,7 +301,7 @@ The color module uses `.dataset.value` and not `.value`.
 
 * `label: ""`
 
-Sets the text content of the label element.
+Sets the text content of the label element. If set to `false` it won't be added to the container.
 
 * `labelAttributes: {}`
 
@@ -357,7 +362,9 @@ Number of how many digits after the decimal to show in tick marks. Default is 0.
 Creates a tiny number to preview the value of the input. It will always show the exact value
 of the input, and appears when interacting with the slider, or actively sliding the slider.
 
-* `tooltipInput: false`
+* ~~`tooltipInput: false`~~
+
+This feature has been removed.
 
 Creates tiny number input to show exact value of while sliding or clicking on slider,
 and can be used to input direct number. Dispatches `"change"` and `"input"` events.
@@ -429,6 +436,56 @@ the same.
 
 * Excess parameters are set as attributes of text element.
 * If `innerHTML` is in use without a `tag` parameter, the text container will receive all attributes.
+
+#### Row `BBrow(params = {items = []})`
+
+Returns an array with a container and the resulting children for a row of buttons, inputs, and text.
+Any parameter that isn't `items` is used as an attribute for the container.
+
+Example usage:
+
+```javascript
+const [row, rowItems] = USUI.modules.BBrow({
+    items:[
+        {
+            text: "Log to Console", // creates a BBtext
+            tag: "label",
+            for: "input"
+        },
+        {
+            type: "text", // creates a BBinput
+            placeholder: "To log",
+            label:false,
+            id: "input",
+            name: "input"
+        },
+        {
+            buttons: [ // creates a BBbuttons
+                {
+                    text:"Log",
+                    title: "Log value of the input in console",
+                    action: ()=>{
+                        console.log(popupContainer.querySelector("#input").value);
+                    },
+                },
+            ]
+        },
+    ]
+});
+popupContent.appendChild(row);
+// rowItems returns [BBtextContainer, [BBinputContainer, input], BBbuttonsContainer]
+```
+
+##### `BBrow` Parameters Object
+
+Using any parameter that isn't `items` will be added to the container as attributes.
+
+* `items: []` Items
+
+Array of button, text, or inputs objects to add. These have the same parameters
+as `BBinput`,`BBbuttons`, and `BBtext`. It will select which function to use
+depending on the parameters in the object. If an object is passed that has more
+than one of these parameters, it prioritizes, in order, `text`, `type`, and `buttons`.
 
 ## Hello, world! Example
 

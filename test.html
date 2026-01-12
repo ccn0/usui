@@ -367,15 +367,45 @@
     };
 
     function bbTemplate() {
+        USUI.closeMenu("bbtemplate");
+        const [headerRow, headerRowItems] = USUI.modules.BBrow({
+            items: [
+                {
+                    collapse: true,
+                    buttons: [
+                        {
+                            text:"close",
+                            action: ()=>{
+                                USUI.closeMenu(popupContainer);
+                            }
+                        }
+                    ]
+                },
+                {
+                    tag:"h2",
+                    style:"text-align:left",
+                    text:"Alert Text Example",
+                },
+                // {
+                //     type:"text",
+                //     text:"hi",
+                //     buttons:[]
+                // }
+            ]
+        });
+        const header = headerRowItems[1];
+
         const popupContainer = USUI.createPopup({
-            position: ["50%","50%"],
+            position: "center",
             id: "bbtemplate",
-            style: "height:auto;transform:translate(-50%,-50%);",
+            style: "height:auto;",
             fencing:true,
+            handle: header,
             dataset: {
                 balls: true,
             },
-            titlebar: true,
+            titlebar: false,
+            extraDraggable: true,
             title: "Building Blocks Template",
             buttons: [
                 {
@@ -393,39 +423,35 @@
         });
 
         const popupContent = USUI.createPopupContent({
-            style: "padding: 15px;display: block;flex-direction: column;",
+            style: "display: block;flex-direction: column;",
         });
 
-        popupContent.appendChild(USUI.modules.BBtext({
-            tag:"h1",
-            text:"Alert Text Example",
-        }));
+        popupContent.appendChild(headerRow);
 
-        const [exampleText,eginput] = USUI.modules.BBinput({
-            id: "exampleInput",
-            type:"text",
-            label: "Text Input",
-            value:"Hello world!",
-        });
-        popupContent.appendChild(exampleText);
-
-        popupContent.appendChild(USUI.modules.BBbuttons({
-            buttons: [
+        const [bigRow, bigRowItems] = USUI.modules.BBrow({
+            style: "margin:15px;",
+            items:[
                 {
-                    text:"close",
-                    action: ()=>{
-                        USUI.closeMenu(popupContainer);
-                    }
+                    id: "exampleInput",
+                    type:"text",
+                    label: false,
+                    value:"Hello world!",
                 },
                 {
-                    text:"Alert",
-                    title: "Alerts the page of the value of the text input",
-                    action: ()=>{
-                        alert(eginput.value);
-                    },
-                },
+                    buttons:[
+                        {
+                            text:"Alert",
+                            title: "Alerts the page of the value of the text input",
+                            action: ()=>{
+                                alert(bigRow.querySelector("#exampleInput").value);
+                            },
+                        }
+                    ]
+                }
             ]
-        }));
+        });
+        popupContent.appendChild(bigRow);
+        console.log(bigRowItems);
 
         popupContainer.appendChild(popupContent);
         document.body.appendChild(popupContainer);
