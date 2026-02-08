@@ -57,9 +57,11 @@ Example:
 
 #### Behavior Notes
 
-* `action` and `event` parameters are the same. `action` is the preferred property for button callbacks. `event` still exists only for backward compatibility.
+* `action` and `event` parameters are the same.
+  `action` is the preferred property for button callbacks. `event` still exists solely for backwards-compatibility.
 
-* `text` and `textContent` are interchangeable. This is because if no `text` parameter is provided, `textContent` can be used to add the text anyways.
+* `text` and `textContent` are interchangeable.
+  This is because if no `text` parameter is provided, `textContent` can be used to add the text anyways.
 
 * Extra attributes just passthrough. Any additional parameters passed to a function are added as HTML attributes on the element. Some exceptions are listed in their respective sections.
 
