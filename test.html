@@ -69,6 +69,16 @@
                     action: bbTemplate
                 },
                 {
+                    type:"text",
+                    placeholder:"Alerts when enter blah",
+                    id:"titlebarinp",
+                    listeners:{
+                        "change":(e)=>{
+                            console.log(document.querySelector("#titlebarinp").value);
+                        }
+                    }
+                },
+                {
                     text:"Dropdown",
                     dropdown:[
                         {
@@ -322,7 +332,7 @@
             value: 10,
             min:0,
             max:100,
-            step:5,
+            step:1,
             ticks: 5,
             tooltip: true,
         });

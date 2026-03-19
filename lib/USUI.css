@@ -1,7 +1,7 @@
 /* 
     UserScript UI
     -- made by CCN0 -- https://usui.qog.app/ -- https://github.com/ccn0/usui/ --
-    version 0.030beta
+    version 0.031beta
 */
 
 .USUI_popup_T_DEFAULT {
@@ -19,6 +19,8 @@
     --btncolor: #000000;
     --btnborder: 2px outset #aaaaaa;
     --btnborderactive: 2px inset #aaaaaa;
+    --iTextborder: 2px inset #aaaaaa;
+    --iTextborderactive: 2px inset #aaaaaa;
     --disabledtext: solid line-through 2px;
     --defaultpopupzindex: 400;
     --defaulttop: 60px;
@@ -44,6 +46,9 @@
     background-color: var(--bodycolor);
     box-shadow: var(--popupshadow);
     font-family: var(--popupfont);
+    * {
+        box-sizing: border-box;
+    }
 }
 
 .USUI_textcolor {
@@ -60,7 +65,53 @@
     flex-wrap: wrap;
 }
 
-.USUI_titlebarbutton {
+.USUI_input {
+    padding: 0 5px;
+	background-color: var(--bodycolor);
+	font-family: var(--popupfont);
+	color: var(--textcolor);
+	border: var(--iTextborder);
+    min-height: var(--titlebarheight);
+    font-size: 80%;
+    width: 120px;
+    line-height: 0.5rem;
+    &:active {
+        border: var(--iTextborderactive);
+    }
+}
+
+.USUI_button,
+.USUI_fibutton::file-selector-button,
+.USUI_titlebarbutton,
+.USUI_titlebarinput[type=button],
+.USUI_titlebarinput[type=submit],
+.USUI_titlebarinput[type=color],
+.USUI_titlebarinput::file-selector-button {
+    font-size: 14px;
+    cursor: pointer;
+    font-family: var(--popupfont);
+    text-align: center;
+    align-content: center;
+    background-color: var(--btnbgcolor);
+    border: var(--btnborder);
+    color: var(--btncolor);
+    height: auto;
+    &:active,
+    &:has(img:active) {
+        border: var(--btnborderactive);
+        background-color: var(--btnbgcoloractive);
+    }
+    &[disabled] {
+        text-decoration: var(--disabledtext);
+    }
+}
+
+.USUI_titlebarbutton,
+.USUI_titlebarinput[type=button],
+.USUI_titlebarinput[type=submit],
+.USUI_titlebarinput::file-selector-button {
+    cursor: pointer;
+    width: auto;
     padding: 5px;
     min-height: var(--titlebarheight);
     line-height: 0.5rem;
@@ -89,26 +140,6 @@
     margin: 0 5px;
     color: var(--titlebarcolor);
     font-weight: bold;
-}
-
-.USUI_button,
-.USUI_fibutton::file-selector-button {
-    font-size: 14px;
-    cursor: pointer;
-    font-family: sans-serif;
-    text-align: center;
-    align-content: center;
-    background-color: var(--btnbgcolor);
-    border: var(--btnborder);
-    color: var(--btncolor);
-    &:active,
-    &:has(img:active) {
-        border: var(--btnborderactive);
-        background-color: var(--btnbgcoloractive);
-    }
-    &[disabled] {
-        text-decoration: var(--disabledtext);
-    }
 }
 
 .USUI_dropdown {
