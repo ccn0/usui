@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.032beta",
+    version: "0.033beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
@@ -407,7 +407,7 @@ const USUI = {
                 hexCode += values[0].toString(16).padStart(2,"0");
                 hexCode += values[1].toString(16).padStart(2,"0");
                 hexCode += values[2].toString(16).padStart(2,"0");
-                if (includeAlpha && (typeof params.alpha !== "undefined" || params.value.length == 5 || params.value.length == 9)) {
+                if (includeAlpha && (typeof params.alpha !== "undefined" || params.value?.length == 5 || params.value?.length == 9)) {
                     hexCode += alpha.toString(16).padStart(2,"0");
                 };
                 return hexCode;
