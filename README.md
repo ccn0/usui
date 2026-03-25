@@ -594,3 +594,4 @@ function bbTemplate() {
 
 * [MADE BY CCN0](https://ccn0.net), originally created in 2024
 * "UserScript UI" logo, wordmark, and icons use the font [Arimo](https://fonts.google.com/specimen/Arimo) by Steve Matteson.
+* Last updated on 3/24/2026, USUI.js version `0.032beta`.
