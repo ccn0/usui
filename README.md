@@ -55,6 +55,32 @@ Example:
 }
 ```
 
+###### Dropdowns and Dropdown Buttons
+
+Popup Titlebar buttons can have a special key, `dropdown: []`, which is an array that defines a dropdown of buttons
+to select instead of a single action.
+Dropdown buttons can have an extra property, `keepOpen: false`, which is a boolean makes clicking on the button not automatically close
+the dropdown.
+
+Example:
+
+```javascript
+{
+    buttons:[
+        {
+            text:"Button",
+            title:"Does something",
+            dropdown:[
+                {
+                    text:"Dropdown Button",
+                    action: functionReference
+                }
+            ]
+        }
+    ]
+}
+```
+
 #### Behavior Notes
 
 * `action` and `event` parameters are the same.

@@ -4,7 +4,7 @@
 */
 
 const USUI = {
-    version: "0.031beta",
+    version: "0.032beta",
     popups: [],
     defaultpos: ["0","0"],
     __position__: ["0","0"],
@@ -72,6 +72,7 @@ const USUI = {
         USUI.popups = [];
     },
     createDropdown: (params = {
+        creator: HTMLElement,
         killers: [],
         buttons: [
             {
@@ -83,7 +84,7 @@ const USUI = {
     }) => {
         const dropdownCont = document.createElement("div");
         dropdownCont.classList.add("USUI_dropdown");
-        USUI.lib.__autoAttribute__(["buttons"], params, dropdownCont);
+        USUI.lib.__autoAttribute__(["buttons","killers","creator"], params, dropdownCont);
 
         params.buttons?.forEach(button => {
             const btn = document.createElement("button");
@@ -105,6 +106,7 @@ const USUI = {
             dropdownCont.remove();
             document.removeEventListener("mousedown", clickHandler);
             params.killers?.forEach(k => k.removeEventListener?.("mousedown", clickHandler));
+            params.creator.focus();
         };
 
         function clickHandler(e) {
@@ -113,6 +115,31 @@ const USUI = {
 
         document.addEventListener("mousedown", clickHandler);
         params.killers?.forEach(killer => killer.addEventListener("mousedown", removeDropdown));
+
+        params.creator.parentElement.appendChild(dropdownCont);
+        dropdownCont.querySelector("button").focus();
+
+        dropdownCont.addEventListener("keydown",(e)=>{
+            if (!(document.activeElement.parentElement == dropdownCont)) removeDropdown();
+            if (e.key == "Escape") {
+                removeDropdown();
+            };
+        });
+        
+        const creatorbox = params.creator.getBoundingClientRect();
+        const dropdownRect = dropdownCont.getBoundingClientRect();
+
+        let top = creatorbox.bottom;
+        let left = creatorbox.left;
+
+        if (top + dropdownRect.height > window.innerHeight) {
+            top = window.innerHeight - dropdownRect.height;
+        };
+        if (left + dropdownRect.width > window.innerWidth) {
+            left = window.innerWidth - dropdownRect.width;
+        };
+
+        dropdownCont.style.cssText = `top:${top}px;left:${left}px;z-index:${USUI.__layer__};`;
 
         return dropdownCont;
     },
@@ -207,14 +234,12 @@ const USUI = {
                 };
                 tbBtn.textContent = button.text || "";
                 if (button.dropdown) {
-                    tbBtn.addEventListener("click",(e)=>{
-                        const dropdownCont = USUI.createDropdown({
+                    tbBtn.addEventListener("click",()=>{
+                        USUI.createDropdown({
+                            creator:tbBtn,
                             killers:[popupTitlebar,...popupTitlebar.children],
                             buttons:button.dropdown,
                         });
-                        const box = tbBtn.getBoundingClientRect();
-                        dropdownCont.style.cssText = `top:${box.bottom}px;left:${box.left}px;`;
-                        popupTitlebar.appendChild(dropdownCont);
                     });
                 } else {
                     tbBtn.addEventListener("click", (button.event || button.action));
@@ -340,48 +365,70 @@ const USUI = {
             red: 0,
             green: 0,
             blue: 0,
+            alpha: undefined,
         })=>{
-            let values = [];
+            let values = [0,0,0];
+            let alpha = 255;
+
             function defValues(hex) {
-                if (hex.length == 7) {
-                    let temp = hex?.slice(1).match(/.{1,2}/g);
+                if (!hex) return;
+                const h = hex.slice(1);
+                if (h.length === 6) {
+                    const temp = h.match(/.{1,2}/g);
                     values = [Number("0x"+temp[0]),Number("0x"+temp[1]),Number("0x"+temp[2])];
-                };
-                if (hex.length == 4) {
-                    let temp = hex?.slice(1).split("");
+                    alpha = 255;
+                } else if (h.length === 3) {
+                    const temp = h.split("");
                     values = [Number("0x"+temp[0]+temp[0]),Number("0x"+temp[1]+temp[1]),Number("0x"+temp[2]+temp[2])];
+                    alpha = 255;
+                } else if (h.length === 8) {
+                    const temp = h.match(/.{1,2}/g);
+                    values = [Number("0x"+temp[0]),Number("0x"+temp[1]),Number("0x"+temp[2])];
+                    alpha = Number("0x"+temp[3]);
+                } else if (h.length === 4) {
+                    const temp = h.split("");
+                    values = [Number("0x"+temp[0]+temp[0]),Number("0x"+temp[1]+temp[1]),Number("0x"+temp[2]+temp[2])];
+                    alpha = Number("0x"+temp[3]+temp[3]);
                 };
-            };
-            if (params.value) {
-                let temp = params.value?.slice(1).match(/.{1,2}/g) || [params.red, params.green, params.blue];
-                values = [Number("0x"+temp[0]),Number("0x"+temp[1]),Number("0x"+temp[2])];
-            } else {
-                values = [params.red, params.green, params.blue];
             };
 
-            function computeHex() {
+            if (params.value) {
+                defValues(params.value);
+            } else {
+                values = [params.red||0, params.green||0, params.blue||0];
+                if (typeof params.alpha !== "undefined") {
+                    if (params.alpha <= 1) alpha = Math.round(params.alpha * 255);
+                    else alpha = Number(params.alpha);
+                };
+            };
+
+            function computeHex(includeAlpha = true) {
                 let hexCode = "#";
                 hexCode += values[0].toString(16).padStart(2,"0");
                 hexCode += values[1].toString(16).padStart(2,"0");
                 hexCode += values[2].toString(16).padStart(2,"0");
+                if (includeAlpha && (typeof params.alpha !== "undefined" || params.value.length == 5 || params.value.length == 9)) {
+                    hexCode += alpha.toString(16).padStart(2,"0");
+                };
                 return hexCode;
             };
+
             const colorInput = document.createElement("div");
             colorInput.classList.add("USUI_M_colorInput");
             colorInput.tabIndex = "0";
 
             const colorChip = document.createElement("div");
             colorChip.classList.add("USUI_M_colorInput_chip");
-            if (params.value) {
-                colorChip.style.cssText = `background-color:${params.value};`;
-                colorInput.dataset.value = params.value;
-            };
-            if (params.red > 0 || params.green > 0 || params.blue > 0) {
-                colorChip.style.cssText = `background-color:${computeHex()};`;
+
+            function updateChipStyle() {
+                const a = (alpha/255).toFixed(3);
+                colorChip.style.cssText = `background-color: rgba(${values[0]}, ${values[1]}, ${values[2]}, ${a});`;
                 colorInput.dataset.value = computeHex();
-            };
-            if (params.red > 255 || params.green > 255 || params.blue > 255) {
-                console.error("RGB values must be between 0 and 255");
+            }
+            updateChipStyle();
+
+            if (params.red > 255 || params.green > 255 || params.blue > 255 || alpha > 255) {
+                console.error("RGB/Alpha values must be between 0 and 255 (or alpha 0-1).");
                 return;
             };
 
@@ -395,13 +442,12 @@ const USUI = {
                 const hexInput = document.createElement("input");
                 hexInput.classList.add("USUI_M_colorInput_iText")
                 hexInput.type = "text";
-                hexInput.title = "Insert Hex Color Code";
+                hexInput.title = "Insert Hex Color Code (#RRGGBB or #RRGGBBAA)";
                 hexInput.value = computeHex();
-                hexInput.placeholder = "#abcdef";
+                hexInput.placeholder = "#rrggbbaa";
                 hexInput.maxLength = "7";
-                function createSlider(index, params = {
-                    title: "Channel"
-                }) {
+
+                function createSlider(index, params = { title: "Channel" }) {
                     const slider = document.createElement("input");
                     slider.title = params.title;
                     slider.type = "range";
@@ -409,15 +455,14 @@ const USUI = {
                     slider.max = "255";
                     slider.value = values[index];
                     slider.classList.add("USUI_M_colorInput_slider", `USUI_M_colorInput_slider${index}`);
-                    slider.addEventListener("input",(e)=>{
-                        values[index] = Number(e.target.value);
+                    slider.addEventListener("input",(ev)=>{
+                        values[index] = Number(ev.target.value);
                         updateColor();
                     });
-                    slider.addEventListener("change",(e)=>{
-                        values[index] = Number(e.target.value);
+                    slider.addEventListener("change",(ev)=>{
+                        values[index] = Number(ev.target.value);
                         updateColor();
                     });
-
                     prompt.appendChild(slider);
                     return slider;
                 };
@@ -426,28 +471,49 @@ const USUI = {
                 const sliderG = createSlider(1, {title: "Green"});
                 const sliderB = createSlider(2, {title: "Blue"});
 
-                function reportInput(e) {
-                    if (e.target.value.match(/[^0-9a-fA-F#]/g)) return;
-                    defValues(e.target.value);
+                let sliderA = null;
+                const alphaEnabled = (typeof params.alpha !== "undefined" || computeHex(true).length > 7);
+                if (alphaEnabled) {
+                    hexInput.maxLength = "9";
+                    sliderA = document.createElement("input");
+                    sliderA.title = "Alpha";
+                    sliderA.type = "range";
+                    sliderA.min = "0";
+                    sliderA.max = "255";
+                    sliderA.value = alpha;
+                    sliderA.classList.add("USUI_M_colorInput_slider","USUI_M_colorInput_alpha");
+                    sliderA.addEventListener("input",(ev)=>{
+                        alpha = Number(ev.target.value);
+                        updateColor();
+                    });
+                    sliderA.addEventListener("change",(ev)=>{
+                        alpha = Number(ev.target.value);
+                        updateColor();
+                    });
+                    prompt.appendChild(sliderA);
+                };
+
+                function reportInput(ev) {
+                    if (ev.target.value.match(/[^0-9a-fA-F#]/g)) return;
+                    defValues(ev.target.value);
                     sliderR.value = values[0];
                     sliderG.value = values[1];
                     sliderB.value = values[2];
+                    if (alphaEnabled && sliderA) sliderA.value = alpha;
                     updateColor({dontupdate:["hexinput"]});
                 };
-                hexInput.addEventListener("input",(e)=>{
-                    reportInput(e);
-                });
-                hexInput.addEventListener("change",(e)=>{
-                    reportInput(e);
-                });
+                hexInput.addEventListener("input",reportInput);
+                hexInput.addEventListener("change",reportInput);
                 prompt.appendChild(hexInput);
+
                 function updateColor(params = {dontupdate:[]}) {
-                    const hex = computeHex();
-                    colorChip.style.backgroundColor = hex;
+                    const hex = computeHex(true);
+                    const a = (alpha/255).toFixed(3);
+                    colorChip.style.backgroundColor = `rgba(${values[0]}, ${values[1]}, ${values[2]}, ${a})`;
                     colorInput.dataset.value = hex;
                     if (!params.dontupdate.includes("hexinput")) hexInput.value = hex;
-                    prompt.style.backgroundColor = computeHex();
-                    prompt.style.borderColor = computeHex();
+                    prompt.style.backgroundColor = computeHex(true);
+                    prompt.style.borderColor = computeHex(true);
 
                     const inputEvent = new Event("input", { bubbles: true });
                     const changeEvent = new Event("change", { bubbles: true });
@@ -458,9 +524,9 @@ const USUI = {
 
                 colorInput.after(prompt);
                 sliderR.focus();
-                
-                function handleClickOutside(e) {
-                    if (!prompt.contains(e.target)) {
+
+                function handleClickOutside(ev) {
+                    if (!prompt.contains(ev.target)) {
                         prompt.remove();
                         document.removeEventListener("click", handleClickOutside);
                     }
@@ -468,8 +534,8 @@ const USUI = {
                 setTimeout(() => {
                     document.addEventListener("click", handleClickOutside);
                 }, 0);
-                prompt.addEventListener("keydown", (e)=>{
-                    if (e.key == "Escape") {
+                prompt.addEventListener("keydown", (ev)=>{
+                    if (ev.key == "Escape") {
                         prompt.remove();
                         colorInput.focus();
                     };
@@ -495,7 +561,7 @@ const USUI = {
             colorInput.addEventListener("keydown", (e)=>{
                 if (e.key == "Enter" || e.key == " ") {colorPrompt(e)}
             });
-            USUI.lib.__autoAttribute__(["red","green","blue","value"],params,colorInput);
+            USUI.lib.__autoAttribute__(["red","green","blue","alpha","value"],params,colorInput);
 
             colorInput.appendChild(colorChip);
             return colorInput;
