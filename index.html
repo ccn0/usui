@@ -120,19 +120,19 @@ USUI also comes with built-in modules to ease development of configuration menus
                 {
                     textContent: "X",
                     title: "Close",
-                    event: () => {
+                    action:() => {
                         USUIalert("Should run <code>USUI.closeMenu(popup);</code>, but you <em>can</em> close this popup!", {usehtml: true, titletext: "Closeable"})
                     },
                 },
                 {
                     textContent: "Modules",
                     title: "View USUI's built-in input modules",
-                    event: moduleTest
+                    action:moduleTest
                 },
                 {
                     textContent: "Building Blocks",
                     title: "View USUI's built-in UI modules",
-                    event: buildingblocks
+                    action:buildingblocks
                 },
             ],
         });
@@ -171,7 +171,7 @@ USUI also comes with built-in modules to ease development of configuration menus
                 textContent: "X",
                 title: "Close"+(params.titletext.length > 0 ? " "+params.titletext+" Window": ""),
                 classes: ["closebtn"],
-                event: () => {
+                action:() => {
                     USUI.closeMenu(alertContainer);}
                 },
             ]
@@ -205,7 +205,7 @@ USUI also comes with built-in modules to ease development of configuration menus
                 textContent: "X",
                 title: "Close Modules Window",
                 classes: ["closebtn"],
-                event: () => {
+                action:() => {
                     USUI.closeMenu(alertContainer);}
                 },
             ]
@@ -266,7 +266,7 @@ USUI also comes with built-in modules to ease development of configuration menus
                     text: "X",
                     title: "Close Building Blocks Window",
                     classes: ["closebtn"],
-                    event: () => {
+                    action:() => {
                         USUI.closeMenu(alertContainer);
                     }
                 },
@@ -423,7 +423,7 @@ USUI also comes with built-in modules to ease development of configuration menus
                     textContent: "X",
                     title: "Close Window",
                     classes: ["closebtn"],
-                    event: () => {
+                    action:() => {
                         USUI.closeMenu(popupContainer);
                     }
                 },

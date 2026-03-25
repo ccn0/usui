@@ -140,7 +140,7 @@
                 textContent: "X",
                 title: "Close"+(params.titletext.length > 0 ? " "+params.titletext+" Window": ""),
                 classes: ["closebtn"],
-                event: () => {
+                action: () => {
                     USUI.closeMenu(alertContainer);}
                 },
             ]
@@ -174,7 +174,7 @@
                 textContent: "X",
                 title: "Close Modules Window",
                 classes: ["closebtn"],
-                event: () => {
+                action: () => {
                     USUI.closeMenu(alertContainer);}
                 },
             ]
@@ -240,7 +240,7 @@
                     text: "X",
                     title: "Close Building Blocks Window",
                     classes: ["closebtn"],
-                    event: () => {
+                    action: () => {
                         USUI.closeMenu(alertContainer);
                     }
                 },
@@ -458,7 +458,7 @@
                     dataset: {
                         hello: "world",
                     },
-                    event: () => {
+                    action: () => {
                         USUI.closeMenu(popupContainer);
                     }
                 },

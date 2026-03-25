@@ -41,6 +41,27 @@ the 2 strings of CSS units.
 
 Positions are usually `[left, top]` because its way easier to grasp X and Y, but not Y and X.
 
+##### Element Parameters
+
+All objects that define an HTML element can have the special parameters, `listeners` and `dataset`.
+The `listeners` object will add event listeners to the element. The `dataset` object will add all
+keys as data attributes to the element.
+
+Example:
+
+```javascript
+{
+    type:"text",
+    placeholder:"Logs keys pressed while focused",
+    listeners:{
+        "keydown":(e)=>{console.log(e.key)}
+    },
+    dataset:{
+        "notanattribute":"yetitis"
+    }
+}
+```
+
 ##### Button Objects
 
 Most if not all button objects in USUI are an object with properties, `text`, `title`, and `action`.
@@ -90,9 +111,6 @@ Example:
   This is because if no `text` parameter is provided, `textContent` can be used to add the text anyways.
 
 * Extra attributes just passthrough. Any additional parameters passed to a function are added as HTML attributes on the element. Some exceptions are listed in their respective sections.
-
-* If a `dataset` object is used as a parameter, it adds all keys and values to the dataset of
-the element.
 
 #### Themes
 
