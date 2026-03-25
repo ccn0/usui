@@ -547,7 +547,7 @@ function bbTemplate() {
                 textContent: "X",
                 title: "Close Window",
                 classes: ["closebtn"],
-                event: () => {
+                action: () => {
                     USUI.closeMenu(popupContainer);
                 }
             },
